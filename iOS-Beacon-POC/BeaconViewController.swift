@@ -10,7 +10,6 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet var mainView: UIView!
     @IBOutlet var welcomePopup: UIView!
     @IBOutlet var feedbackPopup: UIView!
     @IBOutlet weak var backgroundLogo: UIImageView!
@@ -31,20 +30,15 @@ class ViewController: UIViewController {
 
     @IBAction func onWelcomeButton(sender: AnyObject) {
         view.addSubview(welcomePopup)
-//        let bottomConstraint = welcomePopup.bottomAnchor.constraintEqualToAnchor(backgroundLogo.bottomAnchor)
-//        let leftConstraint = welcomePopup.leftAnchor.constraintEqualToAnchor(backgroundLogo.leftAnchor)
-//        let rightConstraint = welcomePopup.rightAnchor.constraintEqualToAnchor(backgroundLogo.rightAnchor)
-//        let topConstraint = welcomePopup.topAnchor.constraintEqualToAnchor(backgroundLogo.topAnchor)
-        let heightConstraint = welcomePopup.heightAnchor.constraintEqualToConstant(160)
-        let widthConstraint = welcomePopup.widthAnchor.constraintEqualToConstant(240)
-        NSLayoutConstraint.activateConstraints([heightConstraint, widthConstraint])
-        
+        welcomePopup.center = view.center
+        drawShadows(welcomePopup)
         view.layoutIfNeeded()
     }
 
     @IBAction func onFeedbackButton(sender: AnyObject) {
         view.addSubview(feedbackPopup)
-        
+        feedbackPopup.center = view.center
+        drawShadows(feedbackPopup)
         view.layoutIfNeeded()
     }
     
@@ -54,6 +48,13 @@ class ViewController: UIViewController {
     
     @IBAction func onSubmitButton(sender: AnyObject) {
         self.feedbackPopup.removeFromSuperview()
+    }
+    
+    func drawShadows(viewToShadow: UIView) {
+        viewToShadow.layer.shadowOpacity = 0.7
+        viewToShadow.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+        viewToShadow.layer.shadowRadius = 10.0
+        viewToShadow.layer.shadowColor = UIColor.blackColor().CGColor
     }
 }
 
