@@ -12,11 +12,13 @@ class ViewController: UIViewController {
 
     @IBOutlet var welcomePopup: UIView!
     @IBOutlet var feedbackPopup: UIView!
+    @IBOutlet weak var ratingView: CosmosView!
     @IBOutlet weak var backgroundLogo: UIImageView!
     @IBOutlet weak var welcomeButton: UIButton!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
+    @IBOutlet weak var ratingLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,7 @@ class ViewController: UIViewController {
     
     @IBAction func onSubmitButton(sender: AnyObject) {
         self.feedbackPopup.removeFromSuperview()
+        ratingLabel.text = "Rating: " + String(ratingView.rating)
     }
     
     func drawShadows(viewToShadow: UIView) {
