@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController {
-
+class ViewController: UIViewController, CLLocationManagerDelegate {
+    
+    var manager: CLLocationManager!
+    var beaconRegion : CLBeaconRegion!
     @IBOutlet var welcomePopup: UIView!
     @IBOutlet var feedbackPopup: UIView!
     @IBOutlet weak var ratingView: CosmosView!
@@ -19,10 +22,58 @@ class ViewController: UIViewController {
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var metersLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        // Instantiate the location manager
+        manager = CLLocationManager()
+        // set delegate to self
+        manager.delegate = self
+        // if the permissions aren't set to track location - ask to always track
+        if CLLocationManager.authorizationStatus() == .NotDetermined {
+            manager.requestAlwaysAuthorization()
+        }
+        // set beacon region
+        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, identifier: "DeVry Meraki")
+        // start ranging beacons
+        manager.startRangingBeaconsInRegion(beaconRegion)
+    }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        // once permissions are accepted, start updating users location
+        if status == .AuthorizedAlways {
+            manager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
+        // if no beacon is found, just exit the function
+        if (beacons.count == 0) {
+            return
+        }
+        
+        let beacon: CLBeacon = beacons.first!
+        var showWelcomePopup = false
+        metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m"
+        
+        // when the user is right next to the beacon, show welcome popup
+        if (beacon.proximity == CLProximity.Immediate) {
+            showWelcomePopup = true
+        }
+        
+        if (showWelcomePopup) {
+            manager.stopRangingBeaconsInRegion(beaconRegion)
+            self.showWelcomePopup()
+        }
+    }
+    
+    func showWelcomePopup() {
+        view.addSubview(welcomePopup)
+        welcomePopup.center = view.center
+        drawShadows(welcomePopup)
+        view.layoutIfNeeded()
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,6 +97,7 @@ class ViewController: UIViewController {
     
     @IBAction func onThanksButton(sender: AnyObject) {
         self.welcomePopup.removeFromSuperview()
+        manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
@@ -59,5 +111,6 @@ class ViewController: UIViewController {
         viewToShadow.layer.shadowRadius = 10.0
         viewToShadow.layer.shadowColor = UIColor.blackColor().CGColor
     }
+    
 }
 
