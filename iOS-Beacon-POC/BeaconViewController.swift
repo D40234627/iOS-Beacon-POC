@@ -27,6 +27,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let device = UIDevice .currentDevice()
+        print(device.name)
+        print(device.model)
+        print(device.identifierForVendor?.UUIDString)
+        print(device.systemName)
+        print(device.systemVersion)
         // Instantiate the location manager
         manager = CLLocationManager()
         // set delegate to self
