@@ -24,27 +24,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var metersLabel: UILabel!
     
+    var beaconUUID: String!
+    var deviceID: String!
+    var operatingSystem: String!
+    var timeStamp: NSDate!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         let device = UIDevice .currentDevice()
-        print(device.name)
-        print(device.model)
-        print(device.identifierForVendor?.UUIDString)
-        print(device.systemName)
-        print(device.systemVersion)
-        // Instantiate the location manager
+        deviceID = device.identifierForVendor?.UUIDString
+        operatingSystem = device.systemName
+        
+        //Instantiate the location manager
         manager = CLLocationManager()
+        
         // set delegate to self
         manager.delegate = self
+        
         // if the permissions aren't set to track location - ask to always track
         if CLLocationManager.authorizationStatus() == .NotDetermined {
             manager.requestAlwaysAuthorization()
         }
+        
         // set beacon region
         beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, identifier: "DeVry Meraki")
+        
         // start ranging beacons
         manager.startRangingBeaconsInRegion(beaconRegion)
+        
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -64,14 +72,17 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         var showWelcomePopup = false
         metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m"
         
-        // when the user is right next to the beacon, show welcome popup
-        if (beacon.proximity == CLProximity.Immediate) {
+        // when the user is near the beacon, show welcome popup
+        if (beacon.proximity == CLProximity.Near) {
             showWelcomePopup = true
         }
         
         if (showWelcomePopup) {
+            timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
             self.showWelcomePopup()
+            self.generateJSON(beacon.proximityUUID.UUIDString)
+            self.getCustomerEngagement()
         }
     }
     
@@ -116,6 +127,32 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         viewToShadow.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         viewToShadow.layer.shadowRadius = 10.0
         viewToShadow.layer.shadowColor = UIColor.blackColor().CGColor
+    }
+    
+    func getCustomerEngagement() {
+        let request = NSMutableURLRequest(URL: NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DVG-CustomerEngagement-Services/api/customerengagement/")!)
+        request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
+        request.addValue("D40234627", forHTTPHeaderField: "dsi")
+        
+        // Perform the request
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue(), completionHandler:{
+            (response: NSURLResponse?, data: NSData?, error: NSError?)-> Void in
+            
+            // Get data as string
+            let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
+            print(str)
+            }
+        );
+    }
+    
+    func generateJSON(UUID: String) {
+        let jsonObject: [String: AnyObject] = [
+            "beaconUUID": UUID,
+            "deviceID": deviceID,
+            "operatingSystem": operatingSystem,
+            "timeStamp": timeStamp
+        ]
+        print(jsonObject)
     }
     
 }
