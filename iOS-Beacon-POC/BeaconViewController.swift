@@ -35,6 +35,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let device = UIDevice .currentDevice()
         deviceID = device.identifierForVendor?.UUIDString
         operatingSystem = device.systemName
+        postJSON()
+        getCustomerEngagement()
         
         //Instantiate the location manager
         manager = CLLocationManager()
@@ -81,7 +83,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
             self.showWelcomePopup()
-            self.postJSON(beacon.proximityUUID.UUIDString)
+//            self.postJSON(beacon.proximityUUID.UUIDString)
             self.getCustomerEngagement()
         }
     }
@@ -172,15 +174,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return jsonObject
     }
     
-    func postJSON(UUID: String) {
-        let json = generateJSON(UUID)
+    func generateServiceJSON() -> [String: AnyObject] {
+        let jsonObject: [String: AnyObject] = [
+            "caller_id": "D01317819",
+            "contact_type": "Self-service",
+            "short_description": "Short Test",
+            "description": "Long Test"
+        ]
+        return jsonObject
+    }
+    
+    func postJSON() {
+        let json = generateServiceJSON()
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            let url = NSURL(string: "")
+            let url = NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DeVry-Mobile-Services/api/servicenow?sysparm_display_value=true")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
             request.addValue("D40234627", forHTTPHeaderField: "dsi")
+            request.addValue("application/json", forHTTPHeaderField: "content-type")
             request.HTTPBody = jsonData
         
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
