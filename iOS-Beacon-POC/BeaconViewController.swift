@@ -131,18 +131,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func getCustomerEngagement() {
         let request = NSMutableURLRequest(URL: NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DVG-CustomerEngagement-Services/api/customerengagement/")!)
+        request.HTTPMethod = "GET"
         request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
         request.addValue("D40234627", forHTTPHeaderField: "dsi")
         
-        // Perform the request
-        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue(), completionHandler:{
-            (response: NSURLResponse?, data: NSData?, error: NSError?)-> Void in
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
             
-            // Get data as string
-            let str = NSString(data: data!, encoding: NSUTF8StringEncoding)
-            print(str)
+            if error != nil {
+                print("error=\(error)")
+                return
             }
-        );
+            //get response as string
+//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
+//            print("responseString=\(responseString)")
+            
+            do {
+                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                    print(convertedJsonIntoDict)
+                    
+                    let firstValue = convertedJsonIntoDict["Response"] as? String
+                    print(firstValue)
+                    
+                }
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
     }
     
     func generateJSON(UUID: String) {
