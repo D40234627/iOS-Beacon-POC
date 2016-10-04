@@ -28,6 +28,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var deviceID: String!
     var operatingSystem: String!
     var timeStamp: NSDate!
+    var key: String!
+    var dsi: String!
+    var contentType: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,8 +38,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let device = UIDevice .currentDevice()
         deviceID = device.identifierForVendor?.UUIDString
         operatingSystem = device.systemName
-        postJSON()
-        getCustomerEngagement()
+        key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
+        dsi = "D40234627"
+        contentType = "application/json"
         
         //Instantiate the location manager
         manager = CLLocationManager()
@@ -134,8 +138,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     func getCustomerEngagement() {
         let request = NSMutableURLRequest(URL: NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DVG-CustomerEngagement-Services/api/customerengagement/")!)
         request.HTTPMethod = "GET"
-        request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
-        request.addValue("D40234627", forHTTPHeaderField: "dsi")
+        request.addValue(key, forHTTPHeaderField: "authorization")
+        request.addValue(dsi, forHTTPHeaderField: "dsi")
         
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
@@ -144,9 +148,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 print("error=\(error)")
                 return
             }
-            //get response as string
-//            let responseString = NSString(data: data!, encoding: NSUTF8StringEncoding)
-//            print("responseString=\(responseString)")
             
             do {
                 if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
@@ -191,9 +192,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             let url = NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DeVry-Mobile-Services/api/servicenow?sysparm_display_value=true")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
-            request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
-            request.addValue("D40234627", forHTTPHeaderField: "dsi")
-            request.addValue("application/json", forHTTPHeaderField: "content-type")
+            request.addValue(key, forHTTPHeaderField: "authorization")
+            request.addValue(dsi, forHTTPHeaderField: "dsi")
+            request.addValue(contentType, forHTTPHeaderField: "content-type")
             request.HTTPBody = jsonData
         
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
