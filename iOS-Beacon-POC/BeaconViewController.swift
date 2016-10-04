@@ -81,7 +81,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
             self.showWelcomePopup()
-            self.generateJSON(beacon.proximityUUID.UUIDString)
+            self.postJSON(beacon.proximityUUID.UUIDString)
             self.getCustomerEngagement()
         }
     }
@@ -168,7 +168,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             "operatingSystem": operatingSystem,
             "timeStamp": timeStamp
         ]
-        print(jsonObject)
+        print("json as string: =\(jsonObject)")
         return jsonObject
     }
     
