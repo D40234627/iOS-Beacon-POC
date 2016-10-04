@@ -147,10 +147,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 //            print("responseString=\(responseString)")
             
             do {
-                if let convertedJsonIntoDict = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
-                    print(convertedJsonIntoDict)
+                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                    print(result)
                     
-                    let firstValue = convertedJsonIntoDict["Response"] as? String
+                    let firstValue = result["Response"] as? String
                     print(firstValue)
                     
                 }
@@ -161,7 +161,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func generateJSON(UUID: String) {
+    func generateJSON(UUID: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
             "beaconUUID": UUID,
             "deviceID": deviceID,
@@ -169,6 +169,42 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             "timeStamp": timeStamp
         ]
         print(jsonObject)
+        return jsonObject
+    }
+    
+    func postJSON(UUID: String) {
+        let json = generateJSON(UUID)
+        do {
+            let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
+            let url = NSURL(string: "")
+            let request = NSMutableURLRequest(URL: url!)
+            request.HTTPMethod = "POST"
+            request.addValue("PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw=", forHTTPHeaderField: "authorization")
+            request.addValue("D40234627", forHTTPHeaderField: "dsi")
+            request.HTTPBody = jsonData
+        
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                data, response, error in
+            
+                if error != nil {
+                    print("error=\(error)")
+                    return
+                }
+            
+                do {
+                    if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                        print(result)
+                    
+                    }
+                }  catch {
+                    print("Error=\(error)")
+                }
+
+            }
+            task.resume()
+        } catch {
+            print(error)
+        }
     }
     
 }
