@@ -8,20 +8,24 @@
 
 import UIKit
 import CoreLocation
+import CoreBluetooth
+import AVFoundation
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate {
     
     var manager: CLLocationManager!
     var beaconRegion : CLBeaconRegion!
+    var beaconRegion2 : CLBeaconRegion!
+    var bluetoothManager : CBCentralManager!
     @IBOutlet var welcomePopup: UIView!
     @IBOutlet var feedbackPopup: UIView!
     @IBOutlet weak var ratingView: CosmosView!
+    @IBOutlet weak var commentBox: UITextField!
     @IBOutlet weak var backgroundLogo: UIImageView!
     @IBOutlet weak var welcomeButton: UIButton!
     @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var metersLabel: UILabel!
     
     var beaconUUID: String!
@@ -35,12 +39,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: nil)
+        self.centralManagerDidUpdateState(bluetoothManager)
+        
         let device = UIDevice .currentDevice()
         deviceID = device.identifierForVendor?.UUIDString
         operatingSystem = device.systemName
         key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
         dsi = "D40234627"
         contentType = "application/json"
+//        getCustomerEngagement()
         
         //Instantiate the location manager
         manager = CLLocationManager()
@@ -54,11 +62,25 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         // set beacon region
-        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, identifier: "DeVry Meraki")
+        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
+        beaconRegion2 = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "1b09c0cb-63cf-4b31-af1e-646277bd8b49")!, major: 0, minor: 0, identifier: "DeVry Commons")
         
         // start ranging beacons
+//        manager.startRangingBeaconsInRegion(beaconRegion)
+        manager.stopRangingBeaconsInRegion(beaconRegion)
+        manager.startMonitoringForRegion(beaconRegion)
         manager.startRangingBeaconsInRegion(beaconRegion)
         
+    }
+    
+    func centralManagerDidUpdateState(central: CBCentralManager) {
+        switch(bluetoothManager.state) {
+        case CBCentralManagerState.PoweredOff:
+            let alert = UIAlertView.init(title: "Bluetooth Settings", message: "Please enable Bluetooth on your device for this application to work", delegate: nil, cancelButtonTitle: "Ok")
+            alert.show()
+        default:
+            print("unknown")
+        }
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -66,6 +88,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if status == .AuthorizedAlways {
             manager.startUpdatingLocation()
         }
+    }
+    
+    func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        manager.startRangingBeaconsInRegion(beaconRegion)
+    }
+    
+    func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+        manager.stopRangingBeaconsInRegion(beaconRegion)
     }
     
     func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
@@ -76,27 +106,46 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         let beacon: CLBeacon = beacons.first!
         var showWelcomePopup = false
-        metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m"
-        
+        metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m - " + String(region.identifier) + " - UUID: " + String(beacon.proximityUUID) + "- MAJ: " + String(beacon.major) + "- MIN: " + String(beacon.minor)
         // when the user is near the beacon, show welcome popup
-        if (beacon.proximity == CLProximity.Near) {
-            showWelcomePopup = true
+        let distance = Double(round(1000*beacon.accuracy)/1000)
+        if (distance <= 4.0 && beacon.proximity != CLProximity.Unknown) {
+//            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
+//            if (welcomeFlag == true) {
+//                showWelcomePopup = false
+//            } else {
+                showWelcomePopup = true
+//            }
         }
         
         if (showWelcomePopup) {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
             self.showWelcomePopup()
-//            self.postJSON(beacon.proximityUUID.UUIDString)
-            self.getCustomerEngagement()
+            let appState = UIApplication.sharedApplication().applicationState
+            if (appState == .Background) {
+                self.alertUser()
+            }
+//            self.postUserInformation(beacon.proximityUUID.UUIDString)
+//            self.getCustomerEngagement()
+
         }
     }
     
     func showWelcomePopup() {
+        let notificationSound = SystemSoundID(1015)
+        AudioServicesPlaySystemSound(notificationSound)
         view.addSubview(welcomePopup)
         welcomePopup.center = view.center
         drawShadows(welcomePopup)
         view.layoutIfNeeded()
+    }
+    
+    func alertUser() {
+        let notification = UILocalNotification()
+        notification.alertBody = "You have a message"
+        notification.soundName = UILocalNotificationDefaultSoundName
+        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
     }
 
     override func didReceiveMemoryWarning() {
@@ -119,13 +168,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     @IBAction func onThanksButton(sender: AnyObject) {
+//        let setWelcomeFlag = true
+//        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
         manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
+        print(generateFeedbackJSON())
         self.feedbackPopup.removeFromSuperview()
-        ratingLabel.text = "Rating: " + String(ratingView.rating)
     }
     
     func drawShadows(viewToShadow: UIView) {
@@ -164,14 +215,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func generateJSON(UUID: String) -> [String: AnyObject] {
+    func generateWelcomeJSON(UUID: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
             "beaconUUID": UUID,
             "deviceID": deviceID,
             "operatingSystem": operatingSystem,
             "timeStamp": timeStamp
         ]
-        print("json as string: =\(jsonObject)")
+        return jsonObject
+    }
+    
+    func generateFeedbackJSON() -> [String: AnyObject] {
+        let jsonObject: [String: AnyObject] = [
+            "rating": ratingView.rating,
+            "comments": commentBox.text!
+        ]
         return jsonObject
     }
     
@@ -185,7 +243,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return jsonObject
     }
     
-    func postJSON() {
+    func postUserInformation() {
         let json = generateServiceJSON()
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)

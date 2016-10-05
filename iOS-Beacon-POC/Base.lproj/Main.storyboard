@@ -37,14 +37,8 @@
                                             <action selector="onFeedbackButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="cRD-J1-yux"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uyf-4k-3Rl">
-                                        <rect key="frame" x="216" y="11" width="100" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="311-HI-LPf">
-                                        <rect key="frame" x="324" y="11" width="156" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="311-HI-LPf">
+                                        <rect key="frame" x="222" y="0.0" width="353" height="44"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -68,10 +62,10 @@
                     </view>
                     <connections>
                         <outlet property="backgroundLogo" destination="CWx-CL-k0P" id="ZNj-a4-GiW"/>
+                        <outlet property="commentBox" destination="s7h-ng-Ac7" id="mUa-bo-pq0"/>
                         <outlet property="feedbackButton" destination="f9h-7g-Tiz" id="j60-6b-MdX"/>
                         <outlet property="feedbackPopup" destination="kGH-dA-DXr" id="Asv-yJ-6Nj"/>
                         <outlet property="metersLabel" destination="311-HI-LPf" id="le7-6b-EKs"/>
-                        <outlet property="ratingLabel" destination="uyf-4k-3Rl" id="t2a-gx-SVo"/>
                         <outlet property="ratingView" destination="MkK-Bt-fJc" id="z3H-Q5-vol"/>
                         <outlet property="submitButton" destination="iEB-xL-ebp" id="NkY-6L-BVi"/>
                         <outlet property="thanksButton" destination="Wcn-Zo-E9P" id="tGA-uo-wM8"/>
