@@ -61,8 +61,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         
         // set beacon region
-        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
-        beaconRegion2 = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "1b09c0cb-63cf-4b31-af1e-646277bd8b49")!, major: 0, minor: 0, identifier: "DeVry Commons")
+//        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
+        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "48caffe0-c786-4ab9-85f3-6585ace3baee")!, identifier: "DeVry Commons")
         
         // start ranging beacons
         manager.stopRangingBeaconsInRegion(beaconRegion)
@@ -108,12 +108,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // when the user is near the beacon (4meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         if (distance <= 4.0 && beacon.proximity != CLProximity.Unknown) {
-//            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-//            if (welcomeFlag == true) {
-//                showWelcomePopup = false
-//            } else {
+            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
+            if (welcomeFlag == true) {
+                showWelcomePopup = false
+            } else {
                 showWelcomePopup = true
-//            }
+            }
         }
         
         if (showWelcomePopup) {
@@ -125,9 +125,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             if (appState == .Background) {
                 self.alertUser()
             }
-//            self.postUserInformation(beacon.proximityUUID.UUIDString)
-//            self.getCustomerEngagement()
-
+            self.postUserInformation(beacon.proximityUUID.UUIDString)
         }
     }
     
@@ -167,8 +165,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     @IBAction func onThanksButton(sender: AnyObject) {
-//        let setWelcomeFlag = true
-//        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
+        let setWelcomeFlag = true
+        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
         manager.startRangingBeaconsInRegion(beaconRegion)
     }
@@ -185,12 +183,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         viewToShadow.layer.shadowColor = UIColor.blackColor().CGColor
     }
     
-    func getCustomerEngagement() {
-        let request = NSMutableURLRequest(URL: NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DVG-CustomerEngagement-Services/api/customerengagement/")!)
+    func getAttendeeList() {
+        let request = NSMutableURLRequest(URL: NSURL(string: "http://mblpocapp1.poc.devry.edu:9000/attendees")!)
         request.HTTPMethod = "GET"
         request.addValue(key, forHTTPHeaderField: "authorization")
         request.addValue(dsi, forHTTPHeaderField: "dsi")
-        
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -200,12 +197,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             }
             
             do {
-                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    print("responseStatus = \(httpResponse.statusCode)")
+                }
+                
+                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
                     print(result)
-                    
-                    let firstValue = result["Response"] as? String
-                    print(firstValue)
-                    
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
@@ -216,10 +213,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func generateWelcomeJSON(UUID: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
-            "beaconUUID": UUID,
             "deviceID": deviceID,
-            "operatingSystem": operatingSystem,
-            "timeStamp": timeStamp
+            "beaconID": UUID,
+            "os": operatingSystem,
+            "timestamp": String(timeStamp)
         ]
         return jsonObject
     }
@@ -232,28 +229,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         return jsonObject
     }
     
-    func generateServiceJSON() -> [String: AnyObject] {
-        let jsonObject: [String: AnyObject] = [
-            "caller_id": "D01317819",
-            "contact_type": "Self-service",
-            "short_description": "Short Test",
-            "description": "Long Test"
-        ]
-        return jsonObject
-    }
-    
-    func postUserInformation() {
-        let json = generateServiceJSON()
+    func postUserInformation(UUID: String) {
+        let json = generateWelcomeJSON(UUID)
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            let url = NSURL(string: "http://mbldevapp1.dev.devry.edu:8080/DeVry-Mobile-Services/api/servicenow?sysparm_display_value=true")
+            let url = NSURL(string: "http://mblpocapp1.poc.devry.edu:9000/attendee")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
             request.addValue(dsi, forHTTPHeaderField: "dsi")
             request.addValue(contentType, forHTTPHeaderField: "content-type")
             request.HTTPBody = jsonData
-        
+            
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
                 data, response, error in
             
@@ -263,9 +250,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 }
             
                 do {
-                    if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as? NSDictionary {
+                    if let httpResponse = response as? NSHTTPURLResponse {
+                        print("responseStatus = \(httpResponse.statusCode)")
+                    }
+                    if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary {
                         print(result)
-                    
                     }
                 }  catch {
                     print("Error=\(error)")
