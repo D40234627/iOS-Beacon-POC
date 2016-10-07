@@ -105,9 +105,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let beacon: CLBeacon = beacons.first!
         var showWelcomePopup = false
         metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m - " + String(region.identifier) + " - UUID: " + String(beacon.proximityUUID) + "- MAJ: " + String(beacon.major) + "- MIN: " + String(beacon.minor)
-        // when the user is near the beacon (4meters or less), show welcome popup
+        // when the user is near the beacon (5meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
-        if (distance <= 4.0 && beacon.proximity != CLProximity.Unknown) {
+        if (distance <= 5.0 && beacon.proximity != CLProximity.Unknown) {
             let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
             if (welcomeFlag == true) {
                 showWelcomePopup = false
@@ -172,6 +172,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
+        let setFeedbackFlag = true
+        NSUserDefaults.standardUserDefaults().setObject(setFeedbackFlag, forKey: "feedbackFlag")
         print(generateFeedbackJSON())
         self.feedbackPopup.removeFromSuperview()
     }
@@ -266,6 +268,5 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             print(error)
         }
     }
-    
 }
 
