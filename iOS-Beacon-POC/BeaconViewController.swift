@@ -22,8 +22,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet weak var ratingView: CosmosView!
     @IBOutlet weak var commentBox: UITextField!
     @IBOutlet weak var backgroundLogo: UIImageView!
-    @IBOutlet weak var welcomeButton: UIButton!
-    @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var metersLabel: UILabel!
@@ -101,19 +99,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         if (beacons.count == 0) {
             return
         }
-        
+                
         let beacon: CLBeacon = beacons.first!
         var showWelcomePopup = false
         metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m - " + String(region.identifier) + " - UUID: " + String(beacon.proximityUUID) + "- MAJ: " + String(beacon.major) + "- MIN: " + String(beacon.minor)
         // when the user is near the beacon (5meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         if (distance <= 5.0 && beacon.proximity != CLProximity.Unknown) {
-            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-            if (welcomeFlag == true) {
-                showWelcomePopup = false
-            } else {
+//            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
+//            if (welcomeFlag == true) {
+//                showWelcomePopup = false
+//            } else {
                 showWelcomePopup = true
-            }
+//            }
         }
         
         if (showWelcomePopup) {
@@ -150,23 +148,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func onWelcomeButton(sender: AnyObject) {
-        view.addSubview(welcomePopup)
-        welcomePopup.center = view.center
-        drawShadows(welcomePopup)
-        view.layoutIfNeeded()
-    }
-
-    @IBAction func onFeedbackButton(sender: AnyObject) {
-        view.addSubview(feedbackPopup)
-        feedbackPopup.center = view.center
-        drawShadows(feedbackPopup)
-        view.layoutIfNeeded()
-    }
-    
     @IBAction func onThanksButton(sender: AnyObject) {
-        let setWelcomeFlag = true
-        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
+//        let setWelcomeFlag = true
+//        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
         manager.startRangingBeaconsInRegion(beaconRegion)
     }
