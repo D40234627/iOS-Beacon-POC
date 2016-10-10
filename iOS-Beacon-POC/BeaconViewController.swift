@@ -33,6 +33,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var key: String!
     var dsi: String!
     var contentType: String!
+    var showWelcomePopup = false
+    var showFeedbackPopup = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +94,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
         manager.stopRangingBeaconsInRegion(beaconRegion)
+        let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
+        if (welcomeFlag == true) {
+            let feedbackFlag = NSUserDefaults.standardUserDefaults().objectForKey("feedbackFlag") as? Bool
+            if (feedbackFlag == true) {
+                showFeedbackPopup = false
+            } else {
+                showFeedbackPopup = true
+            }
+        }
+        
+        if (showFeedbackPopup) {
+            self.showFeedbackPopupMessage()
+        }
     }
     
     func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
@@ -101,23 +116,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
                 
         let beacon: CLBeacon = beacons.first!
-        var showWelcomePopup = false
         metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m - " + String(region.identifier) + " - UUID: " + String(beacon.proximityUUID) + "- MAJ: " + String(beacon.major) + "- MIN: " + String(beacon.minor)
         // when the user is near the beacon (5meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
+        let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
         if (distance <= 5.0 && beacon.proximity != CLProximity.Unknown) {
-//            let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-//            if (welcomeFlag == true) {
-//                showWelcomePopup = false
-//            } else {
+            if (welcomeFlag == true) {
+                showWelcomePopup = false
+            } else {
                 showWelcomePopup = true
-//            }
+            }
+        }
+        
+        if (welcomeFlag == true && distance >= 10.0 && beacon.proximity != CLProximity.Unknown) {
+            let feedbackFlag = NSUserDefaults.standardUserDefaults().objectForKey("feedbackFlag") as? Bool
+            if (feedbackFlag == true) {
+                showFeedbackPopup = false
+            } else {
+                showFeedbackPopup = true
+            }
         }
         
         if (showWelcomePopup) {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
-            self.showWelcomePopup()
+            self.showWelcomePopupMessage()
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
@@ -125,14 +148,33 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             }
             self.postUserInformation(beacon.proximityUUID.UUIDString)
         }
+        
+        if (showFeedbackPopup) {
+            manager.stopRangingBeaconsInRegion(beaconRegion)
+            self.showFeedbackPopupMessage()
+            //in background mode, show notification so user is prompted to open app
+            let appState = UIApplication.sharedApplication().applicationState
+            if (appState == .Background) {
+                self.alertUser()
+            }
+        }
     }
     
-    func showWelcomePopup() {
+    func showWelcomePopupMessage() {
         let notificationSound = SystemSoundID(1015)
         AudioServicesPlaySystemSound(notificationSound)
         view.addSubview(welcomePopup)
         welcomePopup.center = view.center
         drawShadows(welcomePopup)
+        view.layoutIfNeeded()
+    }
+    
+    func showFeedbackPopupMessage() {
+        let notificationSound = SystemSoundID(1015)
+        AudioServicesPlaySystemSound(notificationSound)
+        view.addSubview(feedbackPopup)
+        feedbackPopup.center = view.center
+        drawShadows(feedbackPopup)
         view.layoutIfNeeded()
     }
     
@@ -149,17 +191,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
 
     @IBAction func onThanksButton(sender: AnyObject) {
-//        let setWelcomeFlag = true
-//        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
+        showWelcomePopup = false
+        let setWelcomeFlag = true
+        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
         manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
+        showFeedbackPopup = false
         let setFeedbackFlag = true
         NSUserDefaults.standardUserDefaults().setObject(setFeedbackFlag, forKey: "feedbackFlag")
-        print(generateFeedbackJSON())
         self.feedbackPopup.removeFromSuperview()
+        manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     func drawShadows(viewToShadow: UIView) {
