@@ -144,7 +144,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
-                self.alertUser()
+                self.alertUser("DVG IT would like to welcome you.")
             }
             self.postUserInformation(beacon.proximityUUID.UUIDString)
         }
@@ -155,7 +155,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
-                self.alertUser()
+                self.alertUser("DVG IT is requesting feedback.")
             }
         }
     }
@@ -178,9 +178,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         view.layoutIfNeeded()
     }
     
-    func alertUser() {
+    func alertUser(message: String) {
         let notification = UILocalNotification()
-        notification.alertBody = "You have a message"
+        notification.alertBody = message
         notification.soundName = UILocalNotificationDefaultSoundName
         UIApplication.sharedApplication().presentLocalNotificationNow(notification)
     }
@@ -263,7 +263,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let json = generateWelcomeJSON(UUID)
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            let url = NSURL(string: "http://mblpocapp1.poc.devry.edu:9000/attendee")
+            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/registerAttendee")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
