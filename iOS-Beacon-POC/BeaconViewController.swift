@@ -49,6 +49,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         dsi = "D40234627"
         contentType = "application/json"
         
+        
         //Instantiate the location manager
         manager = CLLocationManager()
         
@@ -60,15 +61,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             manager.requestAlwaysAuthorization()
         }
         
+//        self.startMonitoring()
+        
+//        let dsiSaved = NSUserDefaults().objectForKey("dsi")
+//        print(dsiSaved)
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        let hasLogin = NSUserDefaults.standardUserDefaults().objectForKey("loginFlag") as? Bool
+        if (hasLogin == true) {
+            let dsi = NSUserDefaults.standardUserDefaults().objectForKey("dsi")
+            print(dsi)
+            self.startMonitoring()
+        } else {
+            performSegueWithIdentifier("Show Login", sender: nil)
+        }
+    }
+    
+    func startMonitoring() {
+        print("Monitoring Started")
         // set beacon region
-//        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
-        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "48caffe0-c786-4ab9-85f3-6585ace3baee")!, identifier: "DeVry Commons")
+        //        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
+        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!, identifier: "DeVry Commons")
         
         // start ranging beacons
         manager.stopRangingBeaconsInRegion(beaconRegion)
         manager.startMonitoringForRegion(beaconRegion)
         manager.startRangingBeaconsInRegion(beaconRegion)
-        
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
@@ -105,7 +125,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         
         if (showFeedbackPopup) {
-            self.showFeedbackPopupMessage()
+            self.showPopUp(feedbackPopup)
         }
     }
     
@@ -140,7 +160,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         if (showWelcomePopup) {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
-            self.showWelcomePopupMessage()
+            self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
@@ -151,7 +171,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         if (showFeedbackPopup) {
             manager.stopRangingBeaconsInRegion(beaconRegion)
-            self.showFeedbackPopupMessage()
+            self.showPopUp(feedbackPopup)
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
@@ -160,21 +180,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
     }
     
-    func showWelcomePopupMessage() {
+    func showPopUp(popup: UIView) {
         let notificationSound = SystemSoundID(1015)
         AudioServicesPlaySystemSound(notificationSound)
-        view.addSubview(welcomePopup)
-        welcomePopup.center = view.center
-        drawShadows(welcomePopup)
-        view.layoutIfNeeded()
-    }
-    
-    func showFeedbackPopupMessage() {
-        let notificationSound = SystemSoundID(1015)
-        AudioServicesPlaySystemSound(notificationSound)
-        view.addSubview(feedbackPopup)
-        feedbackPopup.center = view.center
-        drawShadows(feedbackPopup)
+        view.addSubview(popup)
+        popup.center = view.center
+        drawShadows(popup)
         view.layoutIfNeeded()
     }
     
