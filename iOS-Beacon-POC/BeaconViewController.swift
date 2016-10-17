@@ -10,6 +10,8 @@ import UIKit
 import CoreLocation
 import CoreBluetooth
 import AVFoundation
+import Firebase
+import FirebaseInstanceID
 import FirebaseMessaging
 
 class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate {

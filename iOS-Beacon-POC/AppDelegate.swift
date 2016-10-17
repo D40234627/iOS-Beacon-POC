@@ -40,8 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerForRemoteNotifications()
         
-        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
-
         // Override point for customization after application launch.
         return true
     }

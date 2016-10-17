@@ -8,6 +8,9 @@
 
 import Foundation
 import UIKit
+import Firebase
+import FirebaseInstanceID
+import FirebaseMessaging
 
 class LoginViewController: UIViewController {
     
@@ -25,6 +28,8 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
+        print("submit and subscribe")
+        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
         let dsi = dsiBox.text
         let loginFlag = true
         NSUserDefaults.standardUserDefaults().setObject(dsi, forKey: "dsi")
