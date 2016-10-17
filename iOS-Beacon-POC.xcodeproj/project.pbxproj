@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		944AD3F71DB11F7900FB9A41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 944AD3F61DB11F7900FB9A41 /* GoogleService-Info.plist */; };
+		944AD3F81DB120FF00FB9A41 /* Pods_iOS_Beacon_POC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */; };
+		944AD3FA1DB515C100FB9A41 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944AD3F91DB515C100FB9A41 /* LoginViewController.swift */; };
 		949FF9B71D9C0E0700E64242 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9B61D9C0E0700E64242 /* AppDelegate.swift */; };
 		949FF9B91D9C0E0700E64242 /* BeaconViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9B81D9C0E0700E64242 /* BeaconViewController.swift */; };
 		949FF9BC1D9C0E0700E64242 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 949FF9BA1D9C0E0700E64242 /* Main.storyboard */; };
@@ -16,7 +19,25 @@
 		949FF9CF1D9C424E00E64242 /* CosmosDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		947D2D561DA2DAEE00A95A8D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iOS_Beacon_POC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CD13188443105799FCFB2AD /* Pods-iOS-Beacon-POC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS-Beacon-POC.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS-Beacon-POC/Pods-iOS-Beacon-POC.release.xcconfig"; sourceTree = "<group>"; };
+		7CF2EE478193CC2214894A15 /* Pods-iOS-Beacon-POC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS-Beacon-POC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS-Beacon-POC/Pods-iOS-Beacon-POC.debug.xcconfig"; sourceTree = "<group>"; };
+		944AD3F61DB11F7900FB9A41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		944AD3F91DB515C100FB9A41 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		949FF9B31D9C0E0700E64242 /* iOS-Beacon-POC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-Beacon-POC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		949FF9B61D9C0E0700E64242 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		949FF9B81D9C0E0700E64242 /* BeaconViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeaconViewController.swift; sourceTree = "<group>"; };
@@ -34,18 +55,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				949FF9C91D9C0E1800E64242 /* CoreLocation.framework in Frameworks */,
+				944AD3F81DB120FF00FB9A41 /* Pods_iOS_Beacon_POC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D608E4E25D8868EDF4D3A35 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7CF2EE478193CC2214894A15 /* Pods-iOS-Beacon-POC.debug.xcconfig */,
+				5CD13188443105799FCFB2AD /* Pods-iOS-Beacon-POC.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		949FF9AA1D9C0E0700E64242 = {
 			isa = PBXGroup;
 			children = (
 				949FF9C81D9C0E1800E64242 /* CoreLocation.framework */,
 				949FF9B51D9C0E0700E64242 /* iOS-Beacon-POC */,
 				949FF9B41D9C0E0700E64242 /* Products */,
+				0D608E4E25D8868EDF4D3A35 /* Pods */,
+				97205979418BB298A121E5A5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,13 +95,23 @@
 			children = (
 				949FF9B61D9C0E0700E64242 /* AppDelegate.swift */,
 				949FF9B81D9C0E0700E64242 /* BeaconViewController.swift */,
+				944AD3F91DB515C100FB9A41 /* LoginViewController.swift */,
 				949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */,
 				949FF9BA1D9C0E0700E64242 /* Main.storyboard */,
 				949FF9BD1D9C0E0700E64242 /* Assets.xcassets */,
 				949FF9BF1D9C0E0700E64242 /* LaunchScreen.storyboard */,
 				949FF9C21D9C0E0700E64242 /* Info.plist */,
+				944AD3F61DB11F7900FB9A41 /* GoogleService-Info.plist */,
 			);
 			path = "iOS-Beacon-POC";
+			sourceTree = "<group>";
+		};
+		97205979418BB298A121E5A5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,9 +121,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 949FF9C51D9C0E0700E64242 /* Build configuration list for PBXNativeTarget "iOS-Beacon-POC" */;
 			buildPhases = (
+				2AD49FCBC943CFA823F575C8 /* [CP] Check Pods Manifest.lock */,
 				949FF9AF1D9C0E0700E64242 /* Sources */,
 				949FF9B01D9C0E0700E64242 /* Frameworks */,
 				949FF9B11D9C0E0700E64242 /* Resources */,
+				947D2D561DA2DAEE00A95A8D /* Embed Frameworks */,
+				34DFD13E8637DBCFB76CA7D4 /* [CP] Embed Pods Frameworks */,
+				F2840635CB57083170920928 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -103,6 +150,12 @@
 				TargetAttributes = {
 					949FF9B21D9C0E0700E64242 = {
 						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = P4D2MMW8XK;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -131,17 +184,67 @@
 			files = (
 				949FF9C11D9C0E0700E64242 /* LaunchScreen.storyboard in Resources */,
 				949FF9BE1D9C0E0700E64242 /* Assets.xcassets in Resources */,
+				944AD3F71DB11F7900FB9A41 /* GoogleService-Info.plist in Resources */,
 				949FF9BC1D9C0E0700E64242 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2AD49FCBC943CFA823F575C8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		34DFD13E8637DBCFB76CA7D4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOS-Beacon-POC/Pods-iOS-Beacon-POC-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F2840635CB57083170920928 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iOS-Beacon-POC/Pods-iOS-Beacon-POC-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		949FF9AF1D9C0E0700E64242 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				944AD3FA1DB515C100FB9A41 /* LoginViewController.swift in Sources */,
 				949FF9B91D9C0E0700E64242 /* BeaconViewController.swift in Sources */,
 				949FF9B71D9C0E0700E64242 /* AppDelegate.swift in Sources */,
 				949FF9CF1D9C424E00E64242 /* CosmosDistrib.swift in Sources */,
@@ -247,6 +350,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -255,25 +359,89 @@
 		};
 		949FF9C61D9C0E0700E64242 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7CF2EE478193CC2214894A15 /* Pods-iOS-Beacon-POC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.egomez.iOS-Beacon-POC";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"GoogleInterchangeUtilities\"",
+					"-framework",
+					"\"GoogleSymbolUtilities\"",
+					"-framework",
+					"\"GoogleUtilities\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		949FF9C71D9C0E0700E64242 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5CD13188443105799FCFB2AD /* Pods-iOS-Beacon-POC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.egomez.iOS-Beacon-POC";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"GoogleInterchangeUtilities\"",
+					"-framework",
+					"\"GoogleSymbolUtilities\"",
+					"-framework",
+					"\"GoogleUtilities\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

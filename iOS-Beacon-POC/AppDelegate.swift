@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        FIRApp.configure()
+//        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        
+//        if #available(iOS 10.0, *) {
+//            let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound]
+//            UNUserNotificationCenter.current().requestAuthorization(
+//                options: authOptions,
+//                completionHandler: {_,_ in })
+//            
+//            // For iOS 10 display notification (sent via APNS)
+//            UNUserNotificationCenter.current().delegate = self
+//            // For iOS 10 data message (sent via FCM)
+//            FIRMessaging.messaging().remoteMessageDelegate = self
+//            
+//        } else {
+            let settings: UIUserNotificationSettings =
+            UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+//        }
+        
+        application.registerForRemoteNotifications()
+
         // Override point for customization after application launch.
         return true
     }
@@ -41,6 +64,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+        print("Message ID: \(userInfo["gcm.message_id"]!)")
+        print("%@", userInfo)
+//        let notification = UILocalNotification()
+//        notification.alertBody = String(userInfo["alert"])
+//        notification.soundName = UILocalNotificationDefaultSoundName
+//        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+        
     }
 
 

@@ -35,6 +35,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var contentType: String!
     var showWelcomePopup = false
     var showFeedbackPopup = false
+    var userID: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,18 +62,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             manager.requestAlwaysAuthorization()
         }
         
-//        self.startMonitoring()
-        
-//        let dsiSaved = NSUserDefaults().objectForKey("dsi")
-//        print(dsiSaved)
-        
     }
     
     override func viewDidAppear(animated: Bool) {
         let hasLogin = NSUserDefaults.standardUserDefaults().objectForKey("loginFlag") as? Bool
         if (hasLogin == true) {
-            let dsi = NSUserDefaults.standardUserDefaults().objectForKey("dsi")
-            print(dsi)
+            userID = String(NSUserDefaults.standardUserDefaults().objectForKey("dsi"))
+            print(userID)
             self.startMonitoring()
         } else {
             performSegueWithIdentifier("Show Login", sender: nil)
@@ -257,7 +253,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             "deviceID": deviceID,
             "beaconID": UUID,
             "os": operatingSystem,
-            "timestamp": String(timeStamp)
+            "timestamp": String(timeStamp),
+            "userID": userID
         ]
         return jsonObject
     }

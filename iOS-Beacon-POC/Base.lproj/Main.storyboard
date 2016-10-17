@@ -8,7 +8,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="iOS_Beacon_POC" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Main View" id="BYZ-38-t0r" customClass="ViewController" customModule="iOS_Beacon_POC" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -17,13 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="it_dvg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="CWx-CL-k0P">
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="it_dvg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="CWx-CL-k0P">
                                 <rect key="frame" x="20" y="40" width="560" height="520"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kbW-5a-Qf0">
                                 <rect key="frame" x="0.0" y="548" width="600" height="52"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="311-HI-LPf">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="311-HI-LPf">
                                         <rect key="frame" x="21" y="0.0" width="353" height="44"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -55,6 +55,7 @@
                         <outlet property="submitButton" destination="iEB-xL-ebp" id="NkY-6L-BVi"/>
                         <outlet property="thanksButton" destination="Wcn-Zo-E9P" id="tGA-uo-wM8"/>
                         <outlet property="welcomePopup" destination="CL6-Er-Q3i" id="TXl-eH-tXP"/>
+                        <segue destination="Na2-dr-Mo2" kind="presentation" identifier="Show Login" id="NeH-Xk-WrX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -151,6 +152,63 @@
                 </view>
             </objects>
             <point key="canvasLocation" x="565" y="479"/>
+        </scene>
+        <!--Login View Controller-->
+        <scene sceneID="rFG-cB-4Pz">
+            <objects>
+                <viewController id="Na2-dr-Mo2" customClass="LoginViewController" customModule="iOS_Beacon_POC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="r0F-cs-GMQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="AT5-hh-nOX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Gxg-dF-eXI">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="dsiBox" destination="AnZ-9f-IpF" id="5O5-AV-24T"/>
+                        <outlet property="dsiSubmit" destination="Byf-cY-5oC" id="2x2-a6-EIR"/>
+                        <outlet property="loginView" destination="O6d-lb-oka" id="782-iB-uRW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tEB-aL-kdS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="O6d-lb-oka">
+                    <rect key="frame" x="0.0" y="0.0" width="304" height="191"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter Your DSI:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YYb-J0-cwo">
+                            <rect key="frame" x="20" y="20" width="264" height="30"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="D#" textAlignment="natural" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AnZ-9f-IpF">
+                            <rect key="frame" x="20" y="53" width="259" height="30"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Byf-cY-5oC">
+                            <rect key="frame" x="103" y="91" width="93" height="30"/>
+                            <color key="backgroundColor" red="1" green="0.80000000000000004" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                            <state key="normal" title="SUBMIT"/>
+                            <connections>
+                                <action selector="onDSISubmit:" destination="Na2-dr-Mo2" eventType="touchUpInside" id="AMz-Mb-4C1"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fug-oj-aPv">
+                            <rect key="frame" x="20" y="129" width="259" height="42"/>
+                            <string key="text">By clicking the submit button above, you allow DeVry Education Group to store and utilize data concerning feedback and location information provided through your device within this application.</string>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="6"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+            </objects>
+            <point key="canvasLocation" x="1250" y="479"/>
         </scene>
     </scenes>
     <resources>

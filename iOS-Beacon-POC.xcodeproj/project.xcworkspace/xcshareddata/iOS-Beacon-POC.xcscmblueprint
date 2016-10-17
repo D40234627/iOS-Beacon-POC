@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "827A169AC3141349C90E6D9A7953B25C813DF608",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "827A169AC3141349C90E6D9A7953B25C813DF608" : 0,
+    "67620B5EFA902936DF04070AF595B76AB0333747" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "35FEEFDD-3FAA-49AF-AFF1-C40DDD932FC0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "827A169AC3141349C90E6D9A7953B25C813DF608" : "iOS-Beacon-POC\/",
+    "67620B5EFA902936DF04070AF595B76AB0333747" : "iOS-Beacon-POC\/Alamofire\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "iOS-Beacon-POC",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "iOS-Beacon-POC.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Alamofire\/Alamofire.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67620B5EFA902936DF04070AF595B76AB0333747"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/D40234627\/iOS-Beacon-POC.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "827A169AC3141349C90E6D9A7953B25C813DF608"
+    }
+  ]
+}
