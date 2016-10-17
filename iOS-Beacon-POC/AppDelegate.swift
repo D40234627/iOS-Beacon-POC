@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import FirebaseInstanceID
+import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,8 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
         FIRApp.configure()
-//        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-        
 //        if #available(iOS 10.0, *) {
 //            let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound]
 //            UNUserNotificationCenter.current().requestAuthorization(
@@ -39,6 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         application.registerForRemoteNotifications()
+        
+        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
 
         // Override point for customization after application launch.
         return true
@@ -76,6 +78,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
 
-
 }
+
+//@available(iOS 10, *)
+//extension AppDelegate : UNUserNotificationCenterDelegate {
+//    // Receive displayed notifications for iOS 10 devices.
+//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//        willPresent notification: UNNotification,
+//        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//            let userInfo = notification.request.content.userInfo
+//            // Print message ID.
+//            print("Message ID: \(userInfo["gcm.message_id"]!)")
+//            
+//            // Print full message.
+//            print("%@", userInfo)
+//    }
+//}
+//
+//extension AppDelegate : FIRMessagingDelegate {
+//    // Receive data message on iOS 10 devices.
+//    func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+//        print("%@", remoteMessage.appData)
+//    }
+//}
+
 

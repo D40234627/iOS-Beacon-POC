@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import CoreBluetooth
 import AVFoundation
+import FirebaseMessaging
 
 class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate {
     
@@ -62,6 +63,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             manager.requestAlwaysAuthorization()
         }
         
+//        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
     }
     
     override func viewDidAppear(animated: Bool) {
