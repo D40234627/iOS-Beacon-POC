@@ -24,6 +24,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet var feedbackPopup: UIView!
     @IBOutlet weak var ratingView: CosmosView!
     @IBOutlet weak var commentBox: UITextField!
+    @IBOutlet weak var questionText: UILabel!
     @IBOutlet weak var backgroundLogo: UIImageView!
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
@@ -40,6 +41,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var showFeedbackPopup = false
     var userID: String!
     
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // check bluetooth settings
@@ -53,12 +56,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         dsi = "D40234627"
         contentType = "application/json"
         
-        
         //Instantiate the location manager
         manager = CLLocationManager()
         
         // set delegate to self
         manager.delegate = self
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "checkFeedback", name: "feedbackNotification", object: nil)
+
+    }
+    
+    func checkFeedback() {
+        let question = appDelegate.questionNumber
+        print("THE QUESTION: \(question)")
+        
+        manager.stopRangingBeaconsInRegion(beaconRegion)
+        questionText.text = appDelegate.questionText
+        self.showPopUp(feedbackPopup)
+        //in background mode, show notification so user is prompted to open app
+        let appState = UIApplication.sharedApplication().applicationState
+        if (appState == .Background) {
+            self.alertUser("DVG IT is requesting feedback.")
+        }
+
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -111,19 +131,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
         manager.stopRangingBeaconsInRegion(beaconRegion)
-        let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-        if (welcomeFlag == true) {
-            let feedbackFlag = NSUserDefaults.standardUserDefaults().objectForKey("feedbackFlag") as? Bool
-            if (feedbackFlag == true) {
-                showFeedbackPopup = false
-            } else {
-                showFeedbackPopup = true
-            }
-        }
-        
-        if (showFeedbackPopup) {
-            self.showPopUp(feedbackPopup)
-        }
     }
     
     func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
@@ -145,15 +152,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             }
         }
         
-        if (welcomeFlag == true && distance >= 10.0 && beacon.proximity != CLProximity.Unknown) {
-            let feedbackFlag = NSUserDefaults.standardUserDefaults().objectForKey("feedbackFlag") as? Bool
-            if (feedbackFlag == true) {
-                showFeedbackPopup = false
-            } else {
-                showFeedbackPopup = true
-            }
-        }
-        
         if (showWelcomePopup) {
             timeStamp = NSDate()
             manager.stopRangingBeaconsInRegion(beaconRegion)
@@ -164,16 +162,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 self.alertUser("DVG IT would like to welcome you.")
             }
             self.postUserInformation(beacon.proximityUUID.UUIDString)
-        }
-        
-        if (showFeedbackPopup) {
-            manager.stopRangingBeaconsInRegion(beaconRegion)
-            self.showPopUp(feedbackPopup)
-            //in background mode, show notification so user is prompted to open app
-            let appState = UIApplication.sharedApplication().applicationState
-            if (appState == .Background) {
-                self.alertUser("DVG IT is requesting feedback.")
-            }
         }
     }
     
@@ -207,9 +195,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
-        showFeedbackPopup = false
-        let setFeedbackFlag = true
-        NSUserDefaults.standardUserDefaults().setObject(setFeedbackFlag, forKey: "feedbackFlag")
         self.feedbackPopup.removeFromSuperview()
         manager.startRangingBeaconsInRegion(beaconRegion)
     }

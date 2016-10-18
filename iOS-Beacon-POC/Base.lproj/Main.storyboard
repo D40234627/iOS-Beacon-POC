@@ -51,6 +51,7 @@
                         <outlet property="commentBox" destination="s7h-ng-Ac7" id="mUa-bo-pq0"/>
                         <outlet property="feedbackPopup" destination="kGH-dA-DXr" id="Asv-yJ-6Nj"/>
                         <outlet property="metersLabel" destination="311-HI-LPf" id="le7-6b-EKs"/>
+                        <outlet property="questionText" destination="FDR-ZI-xsR" id="c6y-KO-HE6"/>
                         <outlet property="ratingView" destination="MkK-Bt-fJc" id="z3H-Q5-vol"/>
                         <outlet property="submitButton" destination="iEB-xL-ebp" id="NkY-6L-BVi"/>
                         <outlet property="thanksButton" destination="Wcn-Zo-E9P" id="tGA-uo-wM8"/>

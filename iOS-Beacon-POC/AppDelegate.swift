@@ -15,6 +15,8 @@ import FirebaseMessaging
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var questionNumber: String = ""
+    var questionText: String = ""
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
@@ -74,6 +76,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRMessaging.messaging().appDidReceiveMessage(userInfo)
         print("Message ID: \(userInfo["gcm.message_id"]!)")
         print("%@", userInfo)
+        questionNumber = userInfo["questionNumber"] as! String
+        questionText = userInfo["questionText"] as! String
+        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
@@ -90,8 +95,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func tokenRefreshNotification(notification: NSNotification) {
         print("i am the function")
-        let refreshedToken = FIRInstanceID.instanceID().token()!
-        print("InstanceID token: \(refreshedToken)")
+        if let refreshedToken = FIRInstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+        } else {
+            print("refreshed token is nil")
+        }
         
         connectToFcm()
     }
