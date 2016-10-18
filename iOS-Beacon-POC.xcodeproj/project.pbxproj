@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		944AD3F71DB11F7900FB9A41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 944AD3F61DB11F7900FB9A41 /* GoogleService-Info.plist */; };
-		944AD3F81DB120FF00FB9A41 /* Pods_iOS_Beacon_POC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */; };
 		944AD3FA1DB515C100FB9A41 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944AD3F91DB515C100FB9A41 /* LoginViewController.swift */; };
 		949FF9B71D9C0E0700E64242 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9B61D9C0E0700E64242 /* AppDelegate.swift */; };
 		949FF9B91D9C0E0700E64242 /* BeaconViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9B81D9C0E0700E64242 /* BeaconViewController.swift */; };
@@ -17,6 +16,7 @@
 		949FF9C11D9C0E0700E64242 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 949FF9BF1D9C0E0700E64242 /* LaunchScreen.storyboard */; };
 		949FF9C91D9C0E1800E64242 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FF9C81D9C0E1800E64242 /* CoreLocation.framework */; };
 		949FF9CF1D9C424E00E64242 /* CosmosDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */; };
+		94D647C61DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +47,8 @@
 		949FF9C21D9C0E0700E64242 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		949FF9C81D9C0E1800E64242 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CosmosDistrib.swift; sourceTree = "<group>"; };
+		94D647C31DB580CC0048D5A1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_iOS_Beacon_POC.framework; path = "Pods/../build/Debug-iphoneos/Pods_iOS_Beacon_POC.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,8 +56,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94D647C61DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework in Frameworks */,
 				949FF9C91D9C0E1800E64242 /* CoreLocation.framework in Frameworks */,
-				944AD3F81DB120FF00FB9A41 /* Pods_iOS_Beacon_POC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +111,8 @@
 		97205979418BB298A121E5A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */,
+				94D647C31DB580CC0048D5A1 /* NotificationCenter.framework */,
 				58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */,
 			);
 			name = Frameworks;
@@ -152,6 +156,9 @@
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = P4D2MMW8XK;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -365,6 +372,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -409,6 +420,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -16,11 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-        FIRApp.configure()
 //        if #available(iOS 10.0, *) {
 //            let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound]
 //            UNUserNotificationCenter.current().requestAuthorization(
@@ -39,6 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         
         application.registerForRemoteNotifications()
+        
+        FIRApp.configure()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tokenRefreshNotification:", name: kFIRInstanceIDTokenRefreshNotification, object: nil)
         
         // Override point for customization after application launch.
         return true
@@ -67,13 +69,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+//        print("Message ID: \(userInfo["gcm.message_id"]!)")
+//        print("%@", userInfo)
+        FIRMessaging.messaging().appDidReceiveMessage(userInfo)
         print("Message ID: \(userInfo["gcm.message_id"]!)")
         print("%@", userInfo)
-//        let notification = UILocalNotification()
-//        notification.alertBody = String(userInfo["alert"])
-//        notification.soundName = UILocalNotificationDefaultSoundName
-//        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        let tokenChars = UnsafePointer<CChar>(deviceToken.bytes)
+        var tokenString = ""
         
+        for i in 0..<deviceToken.length {
+            tokenString += String(format: "%02.2hhx", arguments: [tokenChars[i]])
+        }
+        
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
+        print("Device Token:", tokenString)
+    }
+    
+    func tokenRefreshNotification(notification: NSNotification) {
+        print("i am the function")
+        let refreshedToken = FIRInstanceID.instanceID().token()!
+        print("InstanceID token: \(refreshedToken)")
+        
+        connectToFcm()
+    }
+    
+    func connectToFcm() {
+        FIRMessaging.messaging().connectWithCompletion { (error) in
+            if (error != nil) {
+                print("Unable to connect to fcm. \(error)")
+            } else {
+                print("connected to fcm.")
+            }
+        }
     }
 
 }
@@ -81,9 +111,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //@available(iOS 10, *)
 //extension AppDelegate : UNUserNotificationCenterDelegate {
 //    // Receive displayed notifications for iOS 10 devices.
-//    func userNotificationCenter(_ center: UNUserNotificationCenter,
+//    func userNotificationCenter(center: UNUserNotificationCenter,
 //        willPresent notification: UNNotification,
-//        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
 //            let userInfo = notification.request.content.userInfo
 //            // Print message ID.
 //            print("Message ID: \(userInfo["gcm.message_id"]!)")
@@ -95,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //
 //extension AppDelegate : FIRMessagingDelegate {
 //    // Receive data message on iOS 10 devices.
-//    func applicationReceivedRemoteMessage(_ remoteMessage: FIRMessagingRemoteMessage) {
+//    func applicationReceivedRemoteMessage(remoteMessage: FIRMessagingRemoteMessage) {
 //        print("%@", remoteMessage.appData)
 //    }
 //}

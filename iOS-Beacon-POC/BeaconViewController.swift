@@ -59,18 +59,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         // set delegate to self
         manager.delegate = self
-        
-        // if the permissions aren't set to track location - ask to always track
-        if CLLocationManager.authorizationStatus() == .NotDetermined {
-            manager.requestAlwaysAuthorization()
-        }
-        
-//        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
     }
     
     override func viewDidAppear(animated: Bool) {
         let hasLogin = NSUserDefaults.standardUserDefaults().objectForKey("loginFlag") as? Bool
         if (hasLogin == true) {
+             // if the permissions aren't set to track location - ask to always track
+            if CLLocationManager.authorizationStatus() == .NotDetermined {
+                manager.requestAlwaysAuthorization()
+            }
             userID = String(NSUserDefaults.standardUserDefaults().objectForKey("dsi"))
             print(userID)
             self.startMonitoring()
@@ -97,7 +94,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             let alert = UIAlertView.init(title: "Bluetooth Settings", message: "Please enable Bluetooth on your device for this application to work", delegate: nil, cancelButtonTitle: "Ok")
             alert.show()
         default:
-            print("unknown")
+            print(" ")
         }
     }
     
