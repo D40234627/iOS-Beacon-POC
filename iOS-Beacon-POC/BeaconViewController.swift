@@ -99,10 +99,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     func operateBeacons(operation: String) {
-        print("Monitoring Started")
+        print("Operate Beacons")
         
         for beacon in (beaconList as NSArray) {
-            print(beacon["beacon_id"])
             let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: beacon["beacon_id"] as! String)!, identifier: beacon["room_name"] as! String)
             switch(operation) {
             case "stop range":
@@ -126,14 +125,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 break
             }
         }
-        // set beacon region
         //        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
 //        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!, identifier: "DeVry Commons")
-        
-        // start ranging beacons
-//        manager.stopRangingBeaconsInRegion(beaconRegion)
-//        manager.startMonitoringForRegion(beaconRegion)
-//        manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
@@ -154,12 +147,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
-//        manager.startRangingBeaconsInRegion(beaconRegion)
         self.operateBeacons("start range")
     }
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-//        manager.stopRangingBeaconsInRegion(beaconRegion)
         self.operateBeacons("stop range")
     }
     
@@ -184,7 +175,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         if (showWelcomePopup) {
             timeStamp = NSDate()
-//            manager.stopRangingBeaconsInRegion(beaconRegion)
             self.operateBeacons("stop range")
             self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
@@ -192,7 +182,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             if (appState == .Background) {
                 self.alertUser("DVG IT would like to welcome you.")
             }
-            self.postUserInformation(beacon.proximityUUID.UUIDString)
+            self.postUserInformation(beacon.proximityUUID.UUIDString, room: region.identifier)
         }
     }
     
@@ -222,7 +212,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let setWelcomeFlag = true
         NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
-//        manager.startRangingBeaconsInRegion(beaconRegion)
         self.operateBeacons("stop monitoring")
     }
     
@@ -235,34 +224,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         viewToShadow.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         viewToShadow.layer.shadowRadius = 10.0
         viewToShadow.layer.shadowColor = UIColor.blackColor().CGColor
-    }
-    
-    func getAttendeeList() {
-        let request = NSMutableURLRequest(URL: NSURL(string: "http://mblpocapp1.poc.devry.edu:9000/attendees")!)
-        request.HTTPMethod = "GET"
-        request.addValue(key, forHTTPHeaderField: "authorization")
-        request.addValue(dsi, forHTTPHeaderField: "dsi")
-        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
-            data, response, error in
-            
-            if error != nil {
-                print("error=\(error)")
-                return
-            }
-            
-            do {
-                if let httpResponse = response as? NSHTTPURLResponse {
-                    print("responseStatus = \(httpResponse.statusCode)")
-                }
-                
-                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
-                    print(result)
-                }
-            } catch let error as NSError {
-                print(error.localizedDescription)
-            }
-        }
-        task.resume()
     }
     
     func getBeacons() {
@@ -280,7 +241,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             
             do {
                 if let httpResponse = response as? NSHTTPURLResponse {
-                    print("response status: \(httpResponse.statusCode)")
+                    print("response status: \(httpResponse.statusCode) - get beacons")
                 }
                 
                 if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
@@ -294,27 +255,31 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         task.resume()
     }
     
-    func generateWelcomeJSON(UUID: String) -> [String: AnyObject] {
+    func generateWelcomeJSON(UUID: String, room: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
             "deviceID": deviceID,
             "beaconID": UUID,
             "os": operatingSystem,
             "timestamp": String(timeStamp),
-            "userID": userID
+            "userID": userID,
+            "roomName": room
         ]
         return jsonObject
     }
     
     func generateFeedbackJSON() -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
+            "questionNumber": appDelegate.questionNumber as String,
             "rating": ratingView.rating,
-            "comments": commentBox.text!
+            "comments": commentBox.text!,
+            "eventID": "1",
+            "eventName": "IT All Hands Meeting"
         ]
         return jsonObject
     }
     
-    func postUserInformation(UUID: String) {
-        let json = generateWelcomeJSON(UUID)
+    func postUserInformation(UUID: String, room: String) {
+        let json = generateWelcomeJSON(UUID, room: room)
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
             let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/registerAttendee")
@@ -335,7 +300,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             
                 do {
                     if let httpResponse = response as? NSHTTPURLResponse {
-                        print("responseStatus = \(httpResponse.statusCode)")
+                        print("responseStatus = \(httpResponse.statusCode) - postUserInformation")
                     }
                     if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary {
                         print(result)

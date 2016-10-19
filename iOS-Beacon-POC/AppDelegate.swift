@@ -71,8 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
-//        print("Message ID: \(userInfo["gcm.message_id"]!)")
-//        print("%@", userInfo)
         FIRMessaging.messaging().appDidReceiveMessage(userInfo)
         print("Message ID: \(userInfo["gcm.message_id"]!)")
         print("%@", userInfo)
@@ -128,6 +126,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            
 //            // Print full message.
 //            print("%@", userInfo)
+
+//            questionNumber = userInfo["questionNumber"] as! String
+//            questionText = userInfo["questionText"] as! String
+//            NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
 //    }
 //}
 //
@@ -135,6 +137,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    // Receive data message on iOS 10 devices.
 //    func applicationReceivedRemoteMessage(remoteMessage: FIRMessagingRemoteMessage) {
 //        print("%@", remoteMessage.appData)
+//        questionNumber = remoteMessage.appData["questionNumber"] as! String
+//        questionText = remoteMessage.appData["questionText"] as! String
+//        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
 //    }
 //}
 

@@ -28,7 +28,6 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
-        print("submit and subscribe")
         FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
         let dsi = dsiBox.text
         let loginFlag = true
