@@ -17,7 +17,7 @@ import FirebaseMessaging
 class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralManagerDelegate {
     
     var manager: CLLocationManager!
-    var beaconRegion : CLBeaconRegion!
+//    var beaconRegion : CLBeaconRegion!
     var beaconRegion2 : CLBeaconRegion!
     var bluetoothManager : CBCentralManager!
     @IBOutlet var welcomePopup: UIView!
@@ -42,6 +42,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var userID: String!
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    var beaconList: NSArray = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +72,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let question = appDelegate.questionNumber
         print("THE QUESTION: \(question)")
         
-        manager.stopRangingBeaconsInRegion(beaconRegion)
+//        manager.stopRangingBeaconsInRegion(beaconRegion)
         questionText.text = appDelegate.questionText
         self.showPopUp(feedbackPopup)
         //in background mode, show notification so user is prompted to open app
@@ -90,22 +92,48 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             }
             userID = String(NSUserDefaults.standardUserDefaults().objectForKey("dsi"))
             print(userID)
-            self.startMonitoring()
+            self.getBeacons()
         } else {
             performSegueWithIdentifier("Show Login", sender: nil)
         }
     }
     
-    func startMonitoring() {
+    func operateBeacons(operation: String) {
         print("Monitoring Started")
+        
+        for beacon in (beaconList as NSArray) {
+            print(beacon["beacon_id"])
+            let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: beacon["beacon_id"] as! String)!, identifier: beacon["room_name"] as! String)
+            switch(operation) {
+            case "stop range":
+                manager.stopRangingBeaconsInRegion(beaconRegion)
+                break
+            case "start range":
+                manager.startRangingBeaconsInRegion(beaconRegion)
+                break
+            case "stop monitoring":
+                manager.stopMonitoringForRegion(beaconRegion)
+                break
+            case "start monitoring":
+                manager.startRangingBeaconsInRegion(beaconRegion)
+                break
+            case "all":
+                manager.stopRangingBeaconsInRegion(beaconRegion)
+                manager.startMonitoringForRegion(beaconRegion)
+                manager.startRangingBeaconsInRegion(beaconRegion)
+                break
+            default:
+                break
+            }
+        }
         // set beacon region
         //        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
-        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!, identifier: "DeVry Commons")
+//        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!, identifier: "DeVry Commons")
         
         // start ranging beacons
-        manager.stopRangingBeaconsInRegion(beaconRegion)
-        manager.startMonitoringForRegion(beaconRegion)
-        manager.startRangingBeaconsInRegion(beaconRegion)
+//        manager.stopRangingBeaconsInRegion(beaconRegion)
+//        manager.startMonitoringForRegion(beaconRegion)
+//        manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
@@ -126,11 +154,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        manager.startRangingBeaconsInRegion(beaconRegion)
+//        manager.startRangingBeaconsInRegion(beaconRegion)
+        self.operateBeacons("start range")
     }
     
     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-        manager.stopRangingBeaconsInRegion(beaconRegion)
+//        manager.stopRangingBeaconsInRegion(beaconRegion)
+        self.operateBeacons("stop range")
     }
     
     func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
@@ -154,7 +184,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         if (showWelcomePopup) {
             timeStamp = NSDate()
-            manager.stopRangingBeaconsInRegion(beaconRegion)
+//            manager.stopRangingBeaconsInRegion(beaconRegion)
+            self.operateBeacons("stop range")
             self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
@@ -191,12 +222,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let setWelcomeFlag = true
         NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
-        manager.startRangingBeaconsInRegion(beaconRegion)
+//        manager.startRangingBeaconsInRegion(beaconRegion)
+        self.operateBeacons("stop monitoring")
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
         self.feedbackPopup.removeFromSuperview()
-        manager.startRangingBeaconsInRegion(beaconRegion)
     }
     
     func drawShadows(viewToShadow: UIView) {
@@ -226,6 +257,35 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 
                 if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
                     print(result)
+                }
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
+    
+    func getBeacons() {
+        let request = NSMutableURLRequest(URL: NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/beacon_location")!)
+        request.HTTPMethod = "GET"
+        request.addValue(key, forHTTPHeaderField: "authorization")
+        request.addValue(dsi, forHTTPHeaderField: "dsi")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                print("error: \(error)")
+                return
+            }
+            
+            do {
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    print("response status: \(httpResponse.statusCode)")
+                }
+                
+                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
+                    self.beaconList = result
+                    self.operateBeacons("all")
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
