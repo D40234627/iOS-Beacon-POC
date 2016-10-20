@@ -33,7 +33,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var beaconUUID: String!
     var deviceID: String!
     var operatingSystem: String!
-    var timeStamp: NSDate!
+    var timeStamp: String!
     var key: String!
     var dsi: String!
     var contentType: String!
@@ -44,6 +44,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
     var beaconList: NSArray = []
+    
+    let dateFormatter = NSDateFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +67,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         manager.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "checkFeedback", name: "feedbackNotification", object: nil)
-
+        
     }
     
     func checkFeedback() {
@@ -90,7 +92,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             if CLLocationManager.authorizationStatus() == .NotDetermined {
                 manager.requestAlwaysAuthorization()
             }
-            userID = String(NSUserDefaults.standardUserDefaults().objectForKey("dsi"))
+            userID = NSUserDefaults.standardUserDefaults().objectForKey("dsi") as! String
             print(userID)
             self.getBeacons()
         } else {
@@ -174,7 +176,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         
         if (showWelcomePopup) {
-            timeStamp = NSDate()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            timeStamp = dateFormatter.stringFromDate(NSDate())
             self.operateBeacons("stop range")
             self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
@@ -182,7 +185,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             if (appState == .Background) {
                 self.alertUser("DVG IT would like to welcome you.")
             }
-            self.postUserInformation(beacon.proximityUUID.UUIDString, room: region.identifier)
+            self.checkInUser(beacon.proximityUUID.UUIDString, room: region.identifier)
         }
     }
     
@@ -216,6 +219,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
+        self.postUserFeedback()
         self.feedbackPopup.removeFromSuperview()
     }
     
@@ -257,32 +261,38 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func generateWelcomeJSON(UUID: String, room: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
-            "deviceID": deviceID,
+            "attendeeID": userID,
             "beaconID": UUID,
+            "eventID": "1",
+            "eventName": "IT All Hands Meeting",
+            "timestamp": timeStamp,
             "os": operatingSystem,
-            "timestamp": String(timeStamp),
-            "userID": userID,
-            "roomName": room
+            "deviceID": deviceID
         ]
         return jsonObject
     }
     
     func generateFeedbackJSON() -> [String: AnyObject] {
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let jsonObject: [String: AnyObject] = [
-            "questionNumber": appDelegate.questionNumber as String,
-            "rating": ratingView.rating,
-            "comments": commentBox.text!,
-            "eventID": "1",
-            "eventName": "IT All Hands Meeting"
+            "attendee_id": userID,
+            "event_id": "1",
+            "question_id": appDelegate.questionNumber as String,
+            "question_text": appDelegate.questionText as String,
+            "event_name": "IT All Hands Meeting",
+            "rating_amount": ratingView.rating,
+            "rating_comment": commentBox.text!,
+            "rating_date": dateFormatter.stringFromDate(NSDate())
         ]
         return jsonObject
     }
     
-    func postUserInformation(UUID: String, room: String) {
+    func checkInUser(UUID: String, room: String) {
         let json = generateWelcomeJSON(UUID, room: room)
+        print(json)
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/registerAttendee")
+            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/attendance")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
@@ -300,7 +310,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             
                 do {
                     if let httpResponse = response as? NSHTTPURLResponse {
-                        print("responseStatus = \(httpResponse.statusCode) - postUserInformation")
+                        print("responseStatus = \(httpResponse.statusCode) - checkInUser")
                     }
                     if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary {
                         print(result)
@@ -308,12 +318,50 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 }  catch {
                     print("Error=\(error)")
                 }
-
             }
             task.resume()
         } catch {
             print(error)
         }
     }
+    
+    func postUserFeedback() {
+        let json = generateFeedbackJSON()
+        print(json)
+        do {
+            let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
+            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:9000/DVG-CustomerEngagement-Services/api/customerengagement/ratings_by_question_and_user")
+            let request = NSMutableURLRequest(URL: url!)
+            request.HTTPMethod = "POST"
+            request.addValue(key, forHTTPHeaderField: "authorization")
+            request.addValue(dsi, forHTTPHeaderField: "dsi")
+            request.addValue(contentType, forHTTPHeaderField: "content-type")
+            request.HTTPBody = jsonData
+            
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+                data, response, error in
+                
+                if error != nil {
+                    print("error=\(error)")
+                    return
+                }
+                
+                do {
+                    if let httpResponse = response as? NSHTTPURLResponse {
+                        print("responseStatus = \(httpResponse.statusCode) - postfeedback")
+                    }
+                    if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary {
+                        print(result)
+                    }
+                } catch {
+                    print("Error=\(error)")
+                }
+            }
+            task.resume()
+        } catch {
+            print(error)
+        }
+    }
+    
 }
 
