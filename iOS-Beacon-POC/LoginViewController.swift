@@ -23,7 +23,7 @@ class LoginViewController: UIViewController {
         view.addSubview(loginView)
         loginView.center = view.center
         view.layoutIfNeeded()
-        dsiBox.addTarget(self, action: "didChangeTextView", forControlEvents: UIControlEvents.EditingChanged)
+        dsiBox.addTarget(self, action: #selector(LoginViewController.didChangeTextView), forControlEvents: UIControlEvents.EditingChanged)
         self.disableDSIButton()
     }
     

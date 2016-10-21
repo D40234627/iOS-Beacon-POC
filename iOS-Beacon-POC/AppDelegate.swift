@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
@@ -19,30 +20,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var questionText: String = ""
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
-        UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
-//        if #available(iOS 10.0, *) {
-//            let authOptions : UNAuthorizationOptions = [.Alert, .Badge, .Sound]
-//            UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(
-//                authOptions,
-//                completionHandler: {_,_ in })
-//            
-//            // For iOS 10 display notification (sent via APNS)
-//            UNUserNotificationCenter.currentNotificationCenter().delegate = self
-//            // For iOS 10 data message (sent via FCM)
-//            FIRMessaging.messaging().remoteMessageDelegate = self
-//            
-//        } else {
+        //let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
+        //UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        if #available(iOS 10.0, *) {
+            let authOptions : UNAuthorizationOptions = [.Alert, .Badge, .Sound]
+            UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(
+                authOptions,
+                completionHandler: {_,_ in })
+            
+            // For iOS 10 display notification (sent via APNS)
+            UNUserNotificationCenter.currentNotificationCenter().delegate = self
+            // For iOS 10 data message (sent via FCM)
+            FIRMessaging.messaging().remoteMessageDelegate = self
+            
+         } else {
             let settings: UIUserNotificationSettings =
             UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories: nil)
             application.registerUserNotificationSettings(settings)
-//        }
+        }
         
         application.registerForRemoteNotifications()
         
         FIRApp.configure()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "tokenRefreshNotification:", name: kFIRInstanceIDTokenRefreshNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotification(_:)), name: kFIRInstanceIDTokenRefreshNotification, object: nil)
         
         // Override point for customization after application launch.
         return true
@@ -73,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         FIRMessaging.messaging().appDidReceiveMessage(userInfo)
         print("Message ID: \(userInfo["gcm.message_id"]!)")
+        print("receivenotif")
         print("%@", userInfo)
         questionNumber = userInfo["questionNumber"] as! String
         questionText = userInfo["questionText"] as! String
@@ -88,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
+        
         print("Device Token:", tokenString)
     }
     
@@ -114,33 +117,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
-//@available(iOS 10, *)
-//extension AppDelegate : UNUserNotificationCenterDelegate {
-//    // Receive displayed notifications for iOS 10 devices.
-//    func userNotificationCenter(center: UNUserNotificationCenter,
-//        willPresent notification: UNNotification,
-//        withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
-//            let userInfo = notification.request.content.userInfo
-//            // Print message ID.
-//            print("Message ID: \(userInfo["gcm.message_id"]!)")
-//            
-//            // Print full message.
-//            print("%@", userInfo)
+@available(iOS 10, *)
+extension AppDelegate : UNUserNotificationCenterDelegate {
+    // Receive displayed notifications for iOS 10 devices.
+    func userNotificationCenter(center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
+            let userInfo = notification.request.content.userInfo
+            // Print message ID.
+            print("Message ID: \(userInfo["gcm.message_id"]!)")
 
-//            questionNumber = userInfo["questionNumber"] as! String
-//            questionText = userInfo["questionText"] as! String
-//            NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
-//    }
-//}
-//
-//extension AppDelegate : FIRMessagingDelegate {
-//    // Receive data message on iOS 10 devices.
-//    func applicationReceivedRemoteMessage(remoteMessage: FIRMessagingRemoteMessage) {
-//        print("%@", remoteMessage.appData)
-//        questionNumber = remoteMessage.appData["questionNumber"] as! String
-//        questionText = remoteMessage.appData["questionText"] as! String
-//        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
-//    }
-//}
+            // Print full message.
+            print("extend UN")
+            print("%@", userInfo)
+
+            questionNumber = userInfo["questionNumber"] as! String
+            questionText = userInfo["questionText"] as! String
+            NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+    }
+}
+
+extension AppDelegate : FIRMessagingDelegate {
+    // Receive data message on iOS 10 devices.
+    func applicationReceivedRemoteMessage(remoteMessage: FIRMessagingRemoteMessage) {
+        print("Extend FIRMESSAGINGDEL")
+        print("%@", remoteMessage.appData)
+        questionNumber = remoteMessage.appData["questionNumber"] as! String
+        questionText = remoteMessage.appData["questionText"] as! String
+        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+    }
+}
 
 

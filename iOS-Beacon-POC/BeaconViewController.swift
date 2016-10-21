@@ -66,7 +66,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // set delegate to self
         manager.delegate = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "checkFeedback", name: "feedbackNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.checkFeedback), name: "feedbackNotification", object: nil)
         
     }
     
@@ -133,7 +133,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
         switch(bluetoothManager.state) {
-        case CBCentralManagerState.PoweredOff:
+        case .PoweredOff:
             let alert = UIAlertView.init(title: "Bluetooth Settings", message: "Please enable Bluetooth on your device for this application to work", delegate: nil, cancelButtonTitle: "Ok")
             alert.show()
         default:

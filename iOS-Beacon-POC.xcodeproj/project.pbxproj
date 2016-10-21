@@ -49,6 +49,7 @@
 		949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CosmosDistrib.swift; sourceTree = "<group>"; };
 		94D647C31DB580CC0048D5A1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_iOS_Beacon_POC.framework; path = "Pods/../build/Debug-iphoneos/Pods_iOS_Beacon_POC.framework"; sourceTree = "<group>"; };
+		94DD8DB71DBAABAB00E8A95E /* iOS-Beacon-POC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS-Beacon-POC.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +96,7 @@
 		949FF9B51D9C0E0700E64242 /* iOS-Beacon-POC */ = {
 			isa = PBXGroup;
 			children = (
+				94DD8DB71DBAABAB00E8A95E /* iOS-Beacon-POC.entitlements */,
 				949FF9B61D9C0E0700E64242 /* AppDelegate.swift */,
 				949FF9B81D9C0E0700E64242 /* BeaconViewController.swift */,
 				944AD3F91DB515C100FB9A41 /* LoginViewController.swift */,
@@ -155,6 +157,7 @@
 					949FF9B21D9C0E0700E64242 = {
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = P4D2MMW8XK;
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -369,8 +372,10 @@
 			baseConfigurationReference = 7CF2EE478193CC2214894A15 /* Pods-iOS-Beacon-POC.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "iOS-Beacon-POC/iOS-Beacon-POC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = P4D2MMW8XK;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -409,6 +414,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -417,8 +423,10 @@
 			baseConfigurationReference = 5CD13188443105799FCFB2AD /* Pods-iOS-Beacon-POC.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "iOS-Beacon-POC/iOS-Beacon-POC.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = P4D2MMW8XK;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -457,6 +465,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
