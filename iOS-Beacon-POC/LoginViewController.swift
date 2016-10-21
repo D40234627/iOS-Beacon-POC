@@ -29,6 +29,7 @@ class LoginViewController: UIViewController {
     
     @IBAction func onDSISubmit(sender: AnyObject) {
         FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
+        FIRMessaging.messaging().subscribeToTopic("/topics/reminders")
         let dsi = dsiBox.text
         let loginFlag = true
         NSUserDefaults.standardUserDefaults().setObject(dsi, forKey: "dsi")

@@ -158,6 +158,7 @@
 						CreatedOnToolsVersion = 7.1.1;
 						DevelopmentTeam = P4D2MMW8XK;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;

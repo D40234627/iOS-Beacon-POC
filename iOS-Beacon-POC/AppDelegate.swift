@@ -76,9 +76,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Message ID: \(userInfo["gcm.message_id"]!)")
         print("receivenotif")
         print("%@", userInfo)
-        questionNumber = userInfo["questionNumber"] as! String
-        questionText = userInfo["questionText"] as! String
-        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+        if userInfo["startMeeting"] != nil {
+            NSNotificationCenter.defaultCenter().postNotificationName("startMeetingNotification", object: nil)
+        } else {
+            questionNumber = userInfo["questionNumber"] as! String
+            questionText = userInfo["questionText"] as! String
+            NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+        }
     }
     
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
@@ -131,9 +135,13 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
             print("extend UN")
             print("%@", userInfo)
 
+        if userInfo["startMeeting"] != nil {
+            NSNotificationCenter.defaultCenter().postNotificationName("startMeetingNotification", object: nil)
+        } else {
             questionNumber = userInfo["questionNumber"] as! String
             questionText = userInfo["questionText"] as! String
             NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+        }
     }
 }
 
@@ -142,9 +150,13 @@ extension AppDelegate : FIRMessagingDelegate {
     func applicationReceivedRemoteMessage(remoteMessage: FIRMessagingRemoteMessage) {
         print("Extend FIRMESSAGINGDEL")
         print("%@", remoteMessage.appData)
-        questionNumber = remoteMessage.appData["questionNumber"] as! String
-        questionText = remoteMessage.appData["questionText"] as! String
-        NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+        if remoteMessage.appData["startMeeting"] != nil {
+            NSNotificationCenter.defaultCenter().postNotificationName("startMeetingNotification", object: nil)
+        } else {
+            questionNumber = remoteMessage.appData["questionNumber"] as! String
+            questionText = remoteMessage.appData["questionText"] as! String
+            NSNotificationCenter.defaultCenter().postNotificationName("feedbackNotification", object: nil)
+        }
     }
 }
 

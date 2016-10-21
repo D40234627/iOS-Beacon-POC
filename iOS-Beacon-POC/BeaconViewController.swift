@@ -67,14 +67,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         manager.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.checkFeedback), name: "feedbackNotification", object: nil)
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.checkStartMeeting), name: "startMeetingNotification", object: nil)
     }
     
     func checkFeedback() {
         let question = appDelegate.questionNumber
         print("THE QUESTION: \(question)")
         
-//        manager.stopRangingBeaconsInRegion(beaconRegion)
         questionText.text = appDelegate.questionText
         self.showPopUp(feedbackPopup)
         //in background mode, show notification so user is prompted to open app
@@ -83,6 +82,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             self.alertUser("DVG IT is requesting feedback.")
         }
 
+    }
+    
+    func checkStartMeeting() {
+        self.operateBeacons("all")
+        self.alertUser("The IT All Hands Meeting will start soon!")
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -250,7 +254,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 
                 if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSArray {
                     self.beaconList = result
-                    self.operateBeacons("all")
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
