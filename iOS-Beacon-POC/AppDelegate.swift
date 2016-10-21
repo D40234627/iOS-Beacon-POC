@@ -22,13 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
 //        if #available(iOS 10.0, *) {
-//            let authOptions : UNAuthorizationOptions = [.alert, .badge, .sound]
-//            UNUserNotificationCenter.current().requestAuthorization(
-//                options: authOptions,
+//            let authOptions : UNAuthorizationOptions = [.Alert, .Badge, .Sound]
+//            UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(
+//                authOptions,
 //                completionHandler: {_,_ in })
 //            
 //            // For iOS 10 display notification (sent via APNS)
-//            UNUserNotificationCenter.current().delegate = self
+//            UNUserNotificationCenter.currentNotificationCenter().delegate = self
 //            // For iOS 10 data message (sent via FCM)
 //            FIRMessaging.messaging().remoteMessageDelegate = self
 //            

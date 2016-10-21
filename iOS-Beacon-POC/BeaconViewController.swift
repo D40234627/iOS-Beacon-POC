@@ -167,7 +167,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // when the user is near the beacon (5meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-        if (distance <= 5.0 && beacon.proximity != CLProximity.Unknown) {
+        if (distance <= 6.0 && beacon.proximity != CLProximity.Unknown) {
             if (welcomeFlag == true) {
                 showWelcomePopup = false
             } else {
