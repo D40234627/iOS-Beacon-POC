@@ -17,9 +17,20 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var dsiBox: UITextField!
     @IBOutlet weak var dsiSubmit: UIButton!
     @IBOutlet weak var loginView: UIView!
+    @IBOutlet weak var invalidLabel: UILabel!
+    var key: String!
+    var dsi: String!
+    var contentType: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
+        dsi = "D40234627"
+        contentType = "application/json"
+        
+        invalidLabel.hidden = true
+        
         view.addSubview(loginView)
         loginView.center = view.center
         view.layoutIfNeeded()
@@ -28,13 +39,9 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
-        FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
-        FIRMessaging.messaging().subscribeToTopic("/topics/reminders")
         let dsi = dsiBox.text
-        let loginFlag = true
-        NSUserDefaults.standardUserDefaults().setObject(dsi, forKey: "dsi")
-        NSUserDefaults.standardUserDefaults().setObject(loginFlag, forKey: "loginFlag")
-        self.dismissViewControllerAnimated(true, completion: {})
+        self.validateUser(dsi!)
+        self.dsiBox.text = ""
     }
     
     func didChangeTextView() {
@@ -54,5 +61,57 @@ class LoginViewController: UIViewController {
         dsiSubmit.enabled = true
         dsiSubmit.alpha = 1
     }
+    
+    func validateUser(dsi: String) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/user/" + dsi)!)
+        request.HTTPMethod = "GET"
+        request.addValue(key, forHTTPHeaderField: "authorization")
+        request.addValue(self.dsi, forHTTPHeaderField: "dsi")
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
+            data, response, error in
+            
+            if error != nil {
+                print("error: \(error)")
+                return
+            }
+            
+            do {
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    print("response status: \(httpResponse.statusCode) - validate user")
+                }
+                
+                if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary{
+                    var validDSI: Bool = false
+                    print(result)
+                    print(result["first_name"])
+                    if (result["first_name"] as? String) != nil {
+                        validDSI = true
+                    } else {
+                        validDSI = false
+                    }
+                    print(validDSI)
+                    self.setDSIFlag(validDSI)
+                }
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
+    
+    func setDSIFlag(validDSI: Bool) {
+        print("on flag \(validDSI)")
+        if (validDSI == true) {
+            invalidLabel.hidden = true
+            FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
+            let loginFlag = true
+            NSUserDefaults.standardUserDefaults().setObject(dsi, forKey: "dsi")
+            NSUserDefaults.standardUserDefaults().setObject(loginFlag, forKey: "loginFlag")
+            self.dismissViewControllerAnimated(true, completion: {})
+        } else {
+            invalidLabel.hidden = false
+        }
+    }
+
 
 }

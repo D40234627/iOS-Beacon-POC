@@ -40,6 +40,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var showWelcomePopup = false
     var showFeedbackPopup = false
     var userID: String!
+    var beaconAccessed: String!
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
@@ -131,8 +132,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 break
             }
         }
-        //        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "6fbbef7c-f92c-471e-8d5c-470e9b367fdb")!, major: 0, minor: 1, identifier: "Mobile Area")
-//        beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0")!, identifier: "DeVry Commons")
     }
     
     func centralManagerDidUpdateState(central: CBCentralManager) {
@@ -190,6 +189,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 self.alertUser("DVG IT would like to welcome you.")
             }
             self.checkInUser(beacon.proximityUUID.UUIDString, room: region.identifier)
+            beaconAccessed = beacon.proximityUUID.UUIDString
         }
     }
     
@@ -285,7 +285,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             "event_name": "IT All Hands Meeting",
             "rating_amount": ratingView.rating,
             "rating_comment": commentBox.text!,
-            "rating_date": dateFormatter.stringFromDate(NSDate())
+            "ratingtimestamp": dateFormatter.stringFromDate(NSDate()),
+            "beaconID": beaconAccessed
         ]
         return jsonObject
     }
@@ -333,7 +334,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         print(json)
         do {
             let jsonData = try NSJSONSerialization.dataWithJSONObject(json, options: .PrettyPrinted)
-            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:9000/DVG-CustomerEngagement-Services/api/customerengagement/ratings_by_question_and_user")
+            let url = NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/ratings_by_question_and_user")
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
