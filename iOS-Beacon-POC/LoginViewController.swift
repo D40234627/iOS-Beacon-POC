@@ -90,7 +90,9 @@ class LoginViewController: UIViewController {
                         validDSI = false
                     }
                     print(validDSI)
-                    self.setDSIFlag(validDSI)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.setDSIFlag(validDSI)
+                    })
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)

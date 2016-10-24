@@ -73,7 +73,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject], fetchCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         FIRMessaging.messaging().appDidReceiveMessage(userInfo)
-        print("Message ID: \(userInfo["gcm.message_id"]!)")
         print("receivenotif")
         print("%@", userInfo)
         if userInfo["startMeeting"] != nil {
@@ -99,7 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func tokenRefreshNotification(notification: NSNotification) {
-        print("i am the function")
         if let refreshedToken = FIRInstanceID.instanceID().token() {
             print("InstanceID token: \(refreshedToken)")
         } else {
@@ -129,9 +127,7 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: (UNNotificationPresentationOptions) -> Void) {
             let userInfo = notification.request.content.userInfo
-            // Print message ID.
-            print("Message ID: \(userInfo["gcm.message_id"]!)")
-
+            
             // Print full message.
             print("extend UN")
             print("%@", userInfo)
