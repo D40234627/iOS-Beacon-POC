@@ -19,14 +19,13 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var invalidLabel: UILabel!
     var key: String!
-    var dsi: String!
     var contentType: String!
+    var userID: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
-        dsi = "D40234627"
         contentType = "application/json"
         
         invalidLabel.hidden = true
@@ -39,8 +38,8 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
-        let dsi = dsiBox.text
-        self.validateUser(dsi!)
+        userID = dsiBox.text
+        self.validateUser(userID!)
         self.dsiBox.text = ""
     }
     
@@ -62,11 +61,11 @@ class LoginViewController: UIViewController {
         dsiSubmit.alpha = 1
     }
     
-    func validateUser(dsi: String) {
-        let request = NSMutableURLRequest(URL: NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/user/" + dsi)!)
+    func validateUser(id: String) {
+        let request = NSMutableURLRequest(URL: NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/user/" + id)!)
         request.HTTPMethod = "GET"
         request.addValue(key, forHTTPHeaderField: "authorization")
-        request.addValue(self.dsi, forHTTPHeaderField: "dsi")
+        request.addValue("D40234627", forHTTPHeaderField: "dsi")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -103,7 +102,7 @@ class LoginViewController: UIViewController {
             invalidLabel.hidden = true
             FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
             let loginFlag = true
-            NSUserDefaults.standardUserDefaults().setObject(dsi, forKey: "dsi")
+            NSUserDefaults.standardUserDefaults().setObject(userID, forKey: "dsi")
             NSUserDefaults.standardUserDefaults().setObject(loginFlag, forKey: "loginFlag")
             self.dismissViewControllerAnimated(true, completion: {})
         } else {

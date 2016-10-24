@@ -35,7 +35,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     var operatingSystem: String!
     var timeStamp: String!
     var key: String!
-    var dsi: String!
     var contentType: String!
     var showWelcomePopup = false
     var showFeedbackPopup = false
@@ -58,7 +57,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         deviceID = device.identifierForVendor?.UUIDString
         operatingSystem = device.systemName
         key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
-        dsi = "D40234627"
         contentType = "application/json"
         
         //Instantiate the location manager
@@ -72,8 +70,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     func checkFeedback() {
-        let question = appDelegate.questionNumber
-        
         questionText.text = appDelegate.questionText
         self.showPopUp(feedbackPopup)
         //in background mode, show notification so user is prompted to open app
@@ -235,7 +231,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let request = NSMutableURLRequest(URL: NSURL(string: "http://ec2-52-44-53-47.compute-1.amazonaws.com:8080/DVG-CustomerEngagement-Services/api/customerengagement/beacon_location")!)
         request.HTTPMethod = "GET"
         request.addValue(key, forHTTPHeaderField: "authorization")
-        request.addValue(dsi, forHTTPHeaderField: "dsi")
+        request.addValue("D40234627", forHTTPHeaderField: "dsi")
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request) {
             data, response, error in
             
@@ -297,7 +293,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
-            request.addValue(dsi, forHTTPHeaderField: "dsi")
+            request.addValue("D40234627", forHTTPHeaderField: "dsi")
             request.addValue(contentType, forHTTPHeaderField: "content-type")
             request.HTTPBody = jsonData
             
@@ -335,7 +331,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             let request = NSMutableURLRequest(URL: url!)
             request.HTTPMethod = "POST"
             request.addValue(key, forHTTPHeaderField: "authorization")
-            request.addValue(dsi, forHTTPHeaderField: "dsi")
+            request.addValue("D40234627", forHTTPHeaderField: "dsi")
             request.addValue(contentType, forHTTPHeaderField: "content-type")
             request.HTTPBody = jsonData
             
