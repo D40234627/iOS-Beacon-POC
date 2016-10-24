@@ -82,14 +82,11 @@ class LoginViewController: UIViewController {
                 
                 if let result = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? NSDictionary{
                     var validDSI: Bool = false
-                    print(result)
-                    print(result["first_name"])
                     if (result["first_name"] as? String) != nil {
                         validDSI = true
                     } else {
                         validDSI = false
                     }
-                    print(validDSI)
                     dispatch_async(dispatch_get_main_queue(), {
                         self.setDSIFlag(validDSI)
                     })
@@ -102,7 +99,6 @@ class LoginViewController: UIViewController {
     }
     
     func setDSIFlag(validDSI: Bool) {
-        print("on flag \(validDSI)")
         if (validDSI == true) {
             invalidLabel.hidden = true
             FIRMessaging.messaging().subscribeToTopic("/topics/feedback")

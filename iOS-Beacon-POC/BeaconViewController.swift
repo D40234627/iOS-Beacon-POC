@@ -73,7 +73,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func checkFeedback() {
         let question = appDelegate.questionNumber
-        print("THE QUESTION: \(question)")
         
         questionText.text = appDelegate.questionText
         self.showPopUp(feedbackPopup)
@@ -98,7 +97,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
                 manager.requestAlwaysAuthorization()
             }
             userID = NSUserDefaults.standardUserDefaults().objectForKey("dsi") as! String
-            print(userID)
             self.getBeacons()
         } else {
             performSegueWithIdentifier("Show Login", sender: nil)
@@ -106,7 +104,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
     
     func operateBeacons(operation: String) {
-        print("Operate Beacons")
         
         for beacon in (beaconList as NSArray) {
             let beaconRegion = CLBeaconRegion(proximityUUID: NSUUID(UUIDString: beacon["beacon_id"] as! String)!, identifier: beacon["room_name"] as! String)
