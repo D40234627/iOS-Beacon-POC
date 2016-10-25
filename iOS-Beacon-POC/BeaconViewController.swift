@@ -67,6 +67,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.checkFeedback), name: "feedbackNotification", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.checkStartMeeting), name: "startMeetingNotification", object: nil)
+        
+        let swipeDown: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.Down
+        swipeDown.cancelsTouchesInView = false
+        view.addGestureRecognizer(swipeDown)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     func checkFeedback() {

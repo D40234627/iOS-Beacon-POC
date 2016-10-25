@@ -415,6 +415,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
