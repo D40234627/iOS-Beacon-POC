@@ -29,6 +29,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var metersLabel: UILabel!
+    @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var meetingLabel: UILabel!
     
     var beaconUUID: String!
     var deviceID: String!
@@ -96,6 +98,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     func checkStartMeeting() {
         self.operateBeacons("all")
         self.alertUser("The IT All Hands Meeting will start soon!")
+        meetingLabel.hidden = true
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -371,6 +374,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         } catch {
             print(error)
         }
+    }
+    
+    @IBAction func onResetButton(sender: AnyObject) {
+        self.operateBeacons("stop range")
+        self.operateBeacons("stop monitoring")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("dsi")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("loginFlag")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("welcomeFlag")
+        performSegueWithIdentifier("Show Login", sender: nil)
     }
     
 }
