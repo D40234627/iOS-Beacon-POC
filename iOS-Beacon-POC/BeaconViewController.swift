@@ -92,7 +92,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         if (appState == .Background) {
             self.alertUser("DVG IT is requesting feedback.")
         }
-
+        feedbackPopup.frame.origin.y -= 45
     }
     
     func checkStartMeeting() {
@@ -179,7 +179,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // when the user is near the beacon (5meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-        if (distance <= 8.0 && beacon.proximity != CLProximity.Unknown) {
+        if (distance <= 12.0 && beacon.proximity != CLProximity.Unknown) {
             if (welcomeFlag == true) {
                 showWelcomePopup = false
             } else {
@@ -188,17 +188,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         
         if (showWelcomePopup) {
+            FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             timeStamp = dateFormatter.stringFromDate(NSDate())
             self.operateBeacons("stop range")
+            self.operateBeacons("stop monitoring")
             self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
                 self.alertUser("DVG IT would like to welcome you.")
             }
-            self.checkInUser(beacon.proximityUUID.UUIDString, room: region.identifier)
             beaconAccessed = beacon.proximityUUID.UUIDString
+            NSUserDefaults.standardUserDefaults().setObject(beaconAccessed, forKey: "beaconAccessed")
+            self.checkInUser(beacon.proximityUUID.UUIDString, room: region.identifier)
         }
     }
     
@@ -228,7 +231,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         let setWelcomeFlag = true
         NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
-        self.operateBeacons("stop monitoring")
     }
     
     @IBAction func onSubmitButton(sender: AnyObject) {
@@ -274,7 +276,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     func generateWelcomeJSON(UUID: String, room: String) -> [String: AnyObject] {
         let jsonObject: [String: AnyObject] = [
             "attendeeID": userID,
-            "beaconID": UUID,
+            "beaconID": UUID.lowercaseString,
             "eventID": "1",
             "eventName": "IT All Hands Meeting",
             "timestamp": timeStamp,
@@ -295,8 +297,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             "rating_amount": ratingView.rating,
             "rating_comment": commentBox.text!,
             "ratingtimestamp": dateFormatter.stringFromDate(NSDate()),
-            "beaconID": beaconAccessed
+            "beaconID": (NSUserDefaults.standardUserDefaults().objectForKey("beaconAccessed")?.lowercaseString)!
         ]
+        commentBox.text = ""
         return jsonObject
     }
     
@@ -382,6 +385,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         NSUserDefaults.standardUserDefaults().removeObjectForKey("dsi")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("loginFlag")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("welcomeFlag")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("beaconAccessed")
         performSegueWithIdentifier("Show Login", sender: nil)
     }
     

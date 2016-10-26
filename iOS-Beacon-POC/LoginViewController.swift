@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
-        userID = dsiBox.text
+        userID = dsiBox.text?.uppercaseString
         self.validateUser(userID!)
         self.dsiBox.text = ""
     }
@@ -100,7 +100,6 @@ class LoginViewController: UIViewController {
     func setDSIFlag(validDSI: Bool) {
         if (validDSI == true) {
             invalidLabel.hidden = true
-            FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
             let loginFlag = true
             NSUserDefaults.standardUserDefaults().setObject(userID, forKey: "dsi")
             NSUserDefaults.standardUserDefaults().setObject(loginFlag, forKey: "loginFlag")
