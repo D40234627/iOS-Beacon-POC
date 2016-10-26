@@ -28,7 +28,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet weak var backgroundLogo: UIImageView!
     @IBOutlet weak var thanksButton: UIButton!
     @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var metersLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var meetingLabel: UILabel!
     
@@ -175,8 +174,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
                 
         let beacon: CLBeacon = beacons.first!
-        metersLabel.text = "Distance: " + String(Double(round(1000*beacon.accuracy)/1000)) + "m - " + String(region.identifier) + " - UUID: " + String(beacon.proximityUUID) + "- MAJ: " + String(beacon.major) + "- MIN: " + String(beacon.minor)
-        // when the user is near the beacon (5meters or less), show welcome popup
+        // when the user is near the beacon (12meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
         if (distance <= 12.0 && beacon.proximity != CLProximity.Unknown) {

@@ -24,13 +24,6 @@
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kbW-5a-Qf0">
                                 <frame key="frameInset" minY="548" width="600" height="52"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="311-HI-LPf">
-                                        <frame key="frameInset" minX="21" width="353" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your meeting will start soon. Please leave this application running in the background. Thank You." lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5zX-MN-uNe">
                                         <frame key="frameInset" minX="8" minY="-2" width="328" height="57"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -68,7 +61,6 @@
                         <outlet property="commentBox" destination="s7h-ng-Ac7" id="mUa-bo-pq0"/>
                         <outlet property="feedbackPopup" destination="kGH-dA-DXr" id="Asv-yJ-6Nj"/>
                         <outlet property="meetingLabel" destination="5zX-MN-uNe" id="g6s-ys-1yP"/>
-                        <outlet property="metersLabel" destination="311-HI-LPf" id="le7-6b-EKs"/>
                         <outlet property="questionText" destination="FDR-ZI-xsR" id="c6y-KO-HE6"/>
                         <outlet property="ratingView" destination="MkK-Bt-fJc" id="z3H-Q5-vol"/>
                         <outlet property="resetButton" destination="0ch-pI-QNV" id="REY-ws-PRU"/>
