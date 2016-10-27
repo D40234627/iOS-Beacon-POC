@@ -38,6 +38,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func onDSISubmit(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "beaconAccessed")
         userID = dsiBox.text?.uppercaseString
         self.validateUser(userID!)
         self.dsiBox.text = ""

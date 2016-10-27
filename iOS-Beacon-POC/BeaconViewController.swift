@@ -186,11 +186,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         }
         
         if (showWelcomePopup) {
-            FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            timeStamp = dateFormatter.stringFromDate(NSDate())
             self.operateBeacons("stop range")
             self.operateBeacons("stop monitoring")
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            timeStamp = dateFormatter.stringFromDate(NSDate())
             self.showPopUp(welcomePopup)
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState

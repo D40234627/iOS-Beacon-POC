@@ -114,6 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 print("connected to fcm.")
                 FIRMessaging.messaging().subscribeToTopic("/topics/reminders")
+                FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
             }
         }
     }
