@@ -24,6 +24,12 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let gradient = CAGradientLayer()
+        gradient.frame = self.view.bounds
+        gradient.colors = [UIColor.blackColor().CGColor, UIColor.darkGrayColor().CGColor]
+        gradient.locations = [0.0, 0.85]
+        self.view.layer.insertSublayer(gradient, atIndex: 0)
 
         key = "PYJIKS17nR1rjB+RroyU/KzgUmoz9x84r9YehdpLhJw="
         contentType = "application/json"

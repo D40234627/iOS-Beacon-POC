@@ -30,6 +30,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var meetingLabel: UILabel!
+    @IBOutlet weak var wButton: UIButton!
+    @IBOutlet weak var qButton: UIButton!
     
     var beaconUUID: String!
     var deviceID: String!
@@ -50,6 +52,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let gradient = CAGradientLayer()
+        gradient.frame = self.view.bounds
+        gradient.colors = [UIColor.blackColor().CGColor, UIColor.darkGrayColor().CGColor]
+        gradient.locations = [0.0, 0.85]
+        self.view.layer.insertSublayer(gradient, atIndex: 0)
+        
         // check bluetooth settings
         bluetoothManager = CBCentralManager(delegate: self, queue: nil, options: nil)
         self.centralManagerDidUpdateState(bluetoothManager)
@@ -79,6 +88,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         view.addGestureRecognizer(tap)
     }
     
+    @IBAction func onWButton(sender: AnyObject) {
+        self.showPopUp(welcomePopup)
+    }
+    @IBAction func onQButton(sender: AnyObject) {
+        self.showPopUp(feedbackPopup)
+        
+    }
     func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -89,14 +105,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         //in background mode, show notification so user is prompted to open app
         let appState = UIApplication.sharedApplication().applicationState
         if (appState == .Background) {
-            self.alertUser("DVG IT is requesting feedback.")
+            self.alertUser("The professor is requesting for you to answer a question.")
         }
         feedbackPopup.frame.origin.y -= 45
     }
     
     func checkStartMeeting() {
         self.operateBeacons("all")
-        self.alertUser("The IT All Hands Meeting will start soon!")
+        self.alertUser("Class is now in session!")
         meetingLabel.hidden = true
     }
     
@@ -177,7 +193,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         // when the user is near the beacon (12meters or less), show welcome popup
         let distance = Double(round(1000*beacon.accuracy)/1000)
         let welcomeFlag = NSUserDefaults.standardUserDefaults().objectForKey("welcomeFlag") as? Bool
-        if (distance <= 12.0 && beacon.proximity != CLProximity.Unknown) {
+        if (distance <= 18.0 && beacon.proximity != CLProximity.Unknown) {
             if (welcomeFlag == true) {
                 showWelcomePopup = false
             } else {
@@ -191,14 +207,20 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             timeStamp = dateFormatter.stringFromDate(NSDate())
             self.showPopUp(welcomePopup)
+            
             //in background mode, show notification so user is prompted to open app
             let appState = UIApplication.sharedApplication().applicationState
             if (appState == .Background) {
-                self.alertUser("DVG IT would like to welcome you.")
+                self.alertUser("Welcome to class!")
             }
             beaconAccessed = beacon.proximityUUID.UUIDString
             NSUserDefaults.standardUserDefaults().setObject(beaconAccessed, forKey: "beaconAccessed")
             self.checkInUser(beacon.proximityUUID.UUIDString, room: region.identifier)
+            
+            //prevent welcome from showing up again
+            showWelcomePopup = false
+            let setWelcomeFlag = true
+            NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         }
     }
     
@@ -224,9 +246,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     }
 
     @IBAction func onThanksButton(sender: AnyObject) {
-        showWelcomePopup = false
-        let setWelcomeFlag = true
-        NSUserDefaults.standardUserDefaults().setObject(setWelcomeFlag, forKey: "welcomeFlag")
         self.welcomePopup.removeFromSuperview()
     }
     

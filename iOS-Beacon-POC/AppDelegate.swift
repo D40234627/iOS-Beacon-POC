@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         //let notificationSettings = UIUserNotificationSettings(forTypes: [UIUserNotificationType.Sound, UIUserNotificationType.Alert], categories: nil)
         //UIApplication.sharedApplication().registerUserNotificationSettings(notificationSettings)
+        TestFairy.begin("d8de0e7aefb707e52f5e661b8c1d4980e5305d48")
         if #available(iOS 10.0, *) {
             let authOptions : UNAuthorizationOptions = [.Alert, .Badge, .Sound]
             UNUserNotificationCenter.currentNotificationCenter().requestAuthorizationWithOptions(

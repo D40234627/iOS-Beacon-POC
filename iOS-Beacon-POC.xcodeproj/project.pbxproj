@@ -17,6 +17,13 @@
 		949FF9C91D9C0E1800E64242 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 949FF9C81D9C0E1800E64242 /* CoreLocation.framework */; };
 		949FF9CF1D9C424E00E64242 /* CosmosDistrib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949FF9CE1D9C424E00E64242 /* CosmosDistrib.swift */; };
 		94D647C61DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */; };
+		94F0CFEE1DC7B119002C7F43 /* libTestFairy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFEB1DC7B119002C7F43 /* libTestFairy.a */; };
+		94F0CFEF1DC7B119002C7F43 /* upload-dsym.sh in Resources */ = {isa = PBXBuildFile; fileRef = 94F0CFED1DC7B119002C7F43 /* upload-dsym.sh */; };
+		94F0CFF21DC7B1A0002C7F43 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFF11DC7B1A0002C7F43 /* CoreMedia.framework */; };
+		94F0CFF41DC7B1AC002C7F43 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFF31DC7B1AC002C7F43 /* CoreMotion.framework */; };
+		94F0CFF61DC7B1B5002C7F43 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFF51DC7B1B5002C7F43 /* AVFoundation.framework */; };
+		94F0CFF81DC7B1C0002C7F43 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFF71DC7B1C0002C7F43 /* SystemConfiguration.framework */; };
+		94F0CFFA1DC7B1CD002C7F43 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94F0CFF91DC7B1CD002C7F43 /* OpenGLES.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +57,15 @@
 		94D647C31DB580CC0048D5A1 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_iOS_Beacon_POC.framework; path = "Pods/../build/Debug-iphoneos/Pods_iOS_Beacon_POC.framework"; sourceTree = "<group>"; };
 		94DD8DB71DBAABAB00E8A95E /* iOS-Beacon-POC.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOS-Beacon-POC.entitlements"; sourceTree = "<group>"; };
+		94F0CFEB1DC7B119002C7F43 /* libTestFairy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFairy.a; sourceTree = "<group>"; };
+		94F0CFEC1DC7B119002C7F43 /* TestFairy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestFairy.h; sourceTree = "<group>"; };
+		94F0CFED1DC7B119002C7F43 /* upload-dsym.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = "upload-dsym.sh"; sourceTree = "<group>"; };
+		94F0CFF11DC7B1A0002C7F43 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		94F0CFF31DC7B1AC002C7F43 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		94F0CFF51DC7B1B5002C7F43 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		94F0CFF71DC7B1C0002C7F43 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		94F0CFF91DC7B1CD002C7F43 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		94F0CFFB1DC7B2EA002C7F43 /* Bridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bridging.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +73,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94F0CFFA1DC7B1CD002C7F43 /* OpenGLES.framework in Frameworks */,
+				94F0CFF81DC7B1C0002C7F43 /* SystemConfiguration.framework in Frameworks */,
+				94F0CFF61DC7B1B5002C7F43 /* AVFoundation.framework in Frameworks */,
+				94F0CFF41DC7B1AC002C7F43 /* CoreMotion.framework in Frameworks */,
+				94F0CFF21DC7B1A0002C7F43 /* CoreMedia.framework in Frameworks */,
 				94D647C61DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework in Frameworks */,
+				94F0CFEE1DC7B119002C7F43 /* libTestFairy.a in Frameworks */,
 				949FF9C91D9C0E1800E64242 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,6 +128,10 @@
 				949FF9BF1D9C0E0700E64242 /* LaunchScreen.storyboard */,
 				949FF9C21D9C0E0700E64242 /* Info.plist */,
 				944AD3F61DB11F7900FB9A41 /* GoogleService-Info.plist */,
+				94F0CFEB1DC7B119002C7F43 /* libTestFairy.a */,
+				94F0CFEC1DC7B119002C7F43 /* TestFairy.h */,
+				94F0CFED1DC7B119002C7F43 /* upload-dsym.sh */,
+				94F0CFFB1DC7B2EA002C7F43 /* Bridging.h */,
 			);
 			path = "iOS-Beacon-POC";
 			sourceTree = "<group>";
@@ -113,6 +139,11 @@
 		97205979418BB298A121E5A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				94F0CFF91DC7B1CD002C7F43 /* OpenGLES.framework */,
+				94F0CFF71DC7B1C0002C7F43 /* SystemConfiguration.framework */,
+				94F0CFF51DC7B1B5002C7F43 /* AVFoundation.framework */,
+				94F0CFF31DC7B1AC002C7F43 /* CoreMotion.framework */,
+				94F0CFF11DC7B1A0002C7F43 /* CoreMedia.framework */,
 				94D647C51DB580FB0048D5A1 /* Pods_iOS_Beacon_POC.framework */,
 				94D647C31DB580CC0048D5A1 /* NotificationCenter.framework */,
 				58D7CAEBDEF78108A1088958 /* Pods_iOS_Beacon_POC.framework */,
@@ -197,6 +228,7 @@
 				949FF9BE1D9C0E0700E64242 /* Assets.xcassets in Resources */,
 				944AD3F71DB11F7900FB9A41 /* GoogleService-Info.plist in Resources */,
 				949FF9BC1D9C0E0700E64242 /* Main.storyboard in Resources */,
+				94F0CFEF1DC7B119002C7F43 /* upload-dsym.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +417,10 @@
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iOS-Beacon-POC",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -416,6 +452,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "/Users/ernesto/iOS-Beacon-POC/iOS-Beacon-POC/Bridging.h";
 				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
@@ -437,6 +474,10 @@
 				INFOPLIST_FILE = "iOS-Beacon-POC/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/iOS-Beacon-POC",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -467,6 +508,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.egomez.iOSBeaconPOC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "/Users/ernesto/iOS-Beacon-POC/iOS-Beacon-POC/Bridging.h";
 				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
