@@ -114,8 +114,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Unable to connect to fcm. \(error)")
             } else {
                 print("connected to fcm.")
-                FIRMessaging.messaging().subscribeToTopic("/topics/reminders")
-                FIRMessaging.messaging().subscribeToTopic("/topics/feedback")
+                FIRMessaging.messaging().subscribeToTopic("/topics/classreminders")
+                FIRMessaging.messaging().subscribeToTopic("/topics/classquestions")
             }
         }
     }

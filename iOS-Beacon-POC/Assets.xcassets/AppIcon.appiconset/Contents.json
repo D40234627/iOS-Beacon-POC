@@ -13,37 +13,37 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "it_dvg_58.png",
+      "filename" : "dvu_shield_58.png",
       "scale" : "2x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "it_dvg_87.png",
+      "filename" : "dvu_shield_87.png",
       "scale" : "3x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "it_dvg_80.png",
+      "filename" : "dvu_shield_80.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "it_dvg_120-1.png",
+      "filename" : "dvu_shield_120-1.png",
       "scale" : "3x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "it_dvg_120.png",
+      "filename" : "dvu_shield_120.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "it_dvg_icon.png",
+      "filename" : "favicon-180x180.png",
       "scale" : "3x"
     },
     {
@@ -64,7 +64,7 @@
     {
       "size" : "29x29",
       "idiom" : "ipad",
-      "filename" : "it_dvg_58-1.png",
+      "filename" : "dvu_shield_58-1.png",
       "scale" : "2x"
     },
     {
@@ -75,24 +75,25 @@
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "it_dvg_80-1.png",
+      "filename" : "dvu_shield_80-1.png",
       "scale" : "2x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "it_dvg_76.png",
+      "filename" : "dvu_shield_76.png",
       "scale" : "1x"
     },
     {
       "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "it_dvg_152.png",
+      "filename" : "dvu_shield_152.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "ipad",
       "size" : "83.5x83.5",
+      "idiom" : "ipad",
+      "filename" : "dvu_shield_167.png",
       "scale" : "2x"
     }
   ],

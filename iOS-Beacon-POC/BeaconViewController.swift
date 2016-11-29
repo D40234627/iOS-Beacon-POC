@@ -30,8 +30,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var meetingLabel: UILabel!
-    @IBOutlet weak var wButton: UIButton!
-    @IBOutlet weak var qButton: UIButton!
     
     var beaconUUID: String!
     var deviceID: String!
@@ -88,13 +86,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
         view.addGestureRecognizer(tap)
     }
     
-    @IBAction func onWButton(sender: AnyObject) {
-        self.showPopUp(welcomePopup)
-    }
-    @IBAction func onQButton(sender: AnyObject) {
-        self.showPopUp(feedbackPopup)
-        
-    }
     func dismissKeyboard() {
         view.endEditing(true)
     }
@@ -112,8 +103,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     
     func checkStartMeeting() {
         self.operateBeacons("all")
-        self.alertUser("Class is now in session!")
-        meetingLabel.hidden = true
+        self.alertUser("Your Advanced Graphic Design class is now in session.")
+        meetingLabel.text = "Class is now in session."
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -398,6 +389,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBCentralMana
     @IBAction func onResetButton(sender: AnyObject) {
         self.operateBeacons("stop range")
         self.operateBeacons("stop monitoring")
+        meetingLabel.text = "Class has not started"
         NSUserDefaults.standardUserDefaults().removeObjectForKey("dsi")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("loginFlag")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("welcomeFlag")
